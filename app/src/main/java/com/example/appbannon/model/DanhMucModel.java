@@ -2,10 +2,10 @@ package com.example.appbannon.model;
 
 import java.util.List;
 
-public class SanPhamModel {
+public class DanhMucModel {
     boolean success;
     String message;
-    List<SanPham> result;
+    List<DanhMuc> result;
 
     public boolean isSuccess() {
         return success;
@@ -23,11 +23,11 @@ public class SanPhamModel {
         this.message = message;
     }
 
-    public List<SanPham> getResult() {
+    public List<DanhMuc> getResult() {
         return result;
     }
 
-    public void setResult(List<SanPham> result) {
+    public void setResult(List<DanhMuc> result) {
         this.result = result;
     }
 }

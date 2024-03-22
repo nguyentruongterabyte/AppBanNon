@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
@@ -14,52 +16,48 @@ import com.example.appbannon.model.SanPham;
 
 import java.util.List;
 
-public class SanPhamAdapter extends BaseAdapter {
+public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHolder> {
 
-    List<SanPham> array;
     Context context;
+    List<SanPham> array;
 
-    public SanPhamAdapter(List<SanPham> array, Context context) {
-        this.array = array;
+    public SanPhamAdapter(Context context, List<SanPham> array) {
         this.context = context;
+        this.array = array;
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_san_pham, parent, false);
+
+        return new MyViewHolder(item);
     }
 
     @Override
-    public int getCount() {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        SanPham sanPham = array.get(position);
+        holder.tvTen.setText(sanPham.getTenSanPham());
+        holder.tvGia.setText(sanPham.getGiaSanPham());
+        Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
+
+    }
+
+    @Override
+    public int getItemCount() {
         return array.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
-    public class ViewHolder {
-        TextView textTenSanPham;
-        ImageView ivHinhAnh;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder = null;
-        if (view == null) {
-            viewHolder = new ViewHolder();
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.layout_item_san_pham, null);
-            viewHolder.textTenSanPham = view.findViewById(R.id.item_ten_san_pham);
-            viewHolder.ivHinhAnh = view.findViewById(R.id.item_image);
-            view.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-            viewHolder.textTenSanPham.setText(array.get(i).getTenSanPham());
-            Glide.with(context).load(array.get(i).getHinhAnh()).into(viewHolder.ivHinhAnh);
+        TextView tvGia, tvTen;
+        ImageView image;
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvGia = itemView.findViewById(R.id.item_san_pham_gia);
+            tvTen = itemView.findViewById(R.id.item_ten_san_pham);
+            image = itemView.findViewById(R.id.item_san_pham_image);
         }
-        return view;
     }
 }

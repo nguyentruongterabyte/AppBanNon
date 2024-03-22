@@ -20,8 +20,8 @@ import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
-import com.example.appbannon.adapter.SanPhamAdapter;
-import com.example.appbannon.model.SanPham;
+import com.example.appbannon.adapter.DanhMucAdapter;
+import com.example.appbannon.model.DanhMuc;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -43,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ListView listViewManHinhChinh;
     DrawerLayout drawerLayout;
-    SanPhamAdapter sanPhamAdapter;
-    List<SanPham> mangLoaiSanPham;
+    DanhMucAdapter danhMucAdapter;
+    List<DanhMuc> mangDanhMuc;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ApiBanHang apiBanHang;
 
@@ -57,22 +56,23 @@ public class MainActivity extends AppCompatActivity {
         ActionBar();
         ActionViewFlipper();
         if (isConnected(this)) {
-            Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG).show();
             ActionViewFlipper();
-            getDanhSachSanPham();
+            getDanhMuc();
         } else {
-            Toast.makeText(getApplicationContext(), "Không có internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Không có internet, vui lòng kết nối wifi", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void getDanhSachSanPham() {
-        compositeDisposable.add(apiBanHang.getDanhSachSP()
+    private void getDanhMuc() {
+        compositeDisposable.add(apiBanHang.getDanhMuc()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         sanPhamModel -> {
                             if (sanPhamModel.isSuccess()) {
-                                Toast.makeText(getApplicationContext(), sanPhamModel.getResult().get(0).getTenSanPham(), Toast.LENGTH_LONG).show();
+                                mangDanhMuc = sanPhamModel.getResult();
+                                danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
+                                listViewManHinhChinh.setAdapter(danhMucAdapter);
                             }
                         }
                 ));
@@ -123,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
         listViewManHinhChinh = findViewById(R.id.listViewManHinhChinh);
         drawerLayout = findViewById(R.id.drawerLayout);
 //        Khởi tạo list
-        mangLoaiSanPham = new ArrayList<>();
+        mangDanhMuc = new ArrayList<>();
 //        Khởi tạo adapter
-        sanPhamAdapter = new SanPhamAdapter(mangLoaiSanPham, getApplicationContext());
-        listViewManHinhChinh.setAdapter(sanPhamAdapter);
+        danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
+        listViewManHinhChinh.setAdapter(danhMucAdapter);
     }
 
     private boolean isConnected(Context context) {
@@ -134,5 +134,11 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         return (wifi != null && wifi.isConnected()) || (mobile != null && mobile.isConnected());
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
     }
 }
