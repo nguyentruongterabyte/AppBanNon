@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -21,7 +22,9 @@ import android.widget.ViewFlipper;
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.DanhMucAdapter;
+import com.example.appbannon.adapter.SanPhamAdapter;
 import com.example.appbannon.model.DanhMuc;
+import com.example.appbannon.model.SanPham;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
@@ -43,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewManHinhChinh;
     DrawerLayout drawerLayout;
     DanhMucAdapter danhMucAdapter;
+    SanPhamAdapter sanPhamAdapter;
     List<DanhMuc> mangDanhMuc;
+    List<SanPham> mangSanPham;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     ApiBanHang apiBanHang;
 
@@ -58,9 +63,28 @@ public class MainActivity extends AppCompatActivity {
         if (isConnected(this)) {
             ActionViewFlipper();
             getDanhMuc();
+            getDanhSachSanPham();
         } else {
             Toast.makeText(getApplicationContext(), "Không có internet, vui lòng kết nối wifi", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void getDanhSachSanPham() {
+        compositeDisposable.add(apiBanHang.getDanhSachSanPham()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    sanPhamModel -> {
+                        if (sanPhamModel.isSuccess()) {
+                            mangSanPham = sanPhamModel.getResult();
+                            sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
+                            recyclerViewManHinhChinh.setAdapter(sanPhamAdapter);
+                        }
+                    }, throwable -> {
+                            Toast.makeText(getApplicationContext(), "Không kết nối được với server", Toast.LENGTH_SHORT).show();
+                    }
+                )
+        );
     }
 
     private void getDanhMuc() {
@@ -68,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        sanPhamModel -> {
-                            if (sanPhamModel.isSuccess()) {
-                                mangDanhMuc = sanPhamModel.getResult();
+                        danhMucModel -> {
+                            if (danhMucModel.isSuccess()) {
+                                mangDanhMuc = danhMucModel.getResult();
                                 danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
                                 listViewManHinhChinh.setAdapter(danhMucAdapter);
                             }
@@ -118,12 +142,18 @@ public class MainActivity extends AppCompatActivity {
     private void setControl() {
         toolbarManHinhChinh = findViewById(R.id.toolbarManHinhChinh);
         viewFlipper = findViewById(R.id.viewFlipper);
+
         recyclerViewManHinhChinh = findViewById(R.id.recycleViewManHinhChinh);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerViewManHinhChinh.setLayoutManager(layoutManager);
+        recyclerViewManHinhChinh.setHasFixedSize(true);
+
         navigationView = findViewById(R.id.navigationView);
         listViewManHinhChinh = findViewById(R.id.listViewManHinhChinh);
         drawerLayout = findViewById(R.id.drawerLayout);
 //        Khởi tạo list
         mangDanhMuc = new ArrayList<>();
+        mangSanPham = new ArrayList<>();
 //        Khởi tạo adapter
         danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
         listViewManHinhChinh.setAdapter(danhMucAdapter);

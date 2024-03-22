@@ -51,8 +51,8 @@ public class DanhMucAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.layout_item_danh_muc, null);
-            viewHolder.textTenDanhMuc = view.findViewById(R.id.item_ten_san_pham);
-            viewHolder.ivHinhAnh = view.findViewById(R.id.item_image);
+            viewHolder.textTenDanhMuc = view.findViewById(R.id.item_ten_danh_muc);
+            viewHolder.ivHinhAnh = view.findViewById(R.id.item_danh_muc_image);
             view.setTag(viewHolder);
 
         } else {

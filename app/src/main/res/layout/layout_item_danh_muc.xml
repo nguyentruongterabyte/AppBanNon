@@ -6,14 +6,14 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/item_image"
+        android:id="@+id/item_danh_muc_image"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginLeft="15sp"
         android:src="@drawable/ic_media" />
 
     <TextView
-        android:id="@+id/item_ten_san_pham"
+        android:id="@+id/item_ten_danh_muc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

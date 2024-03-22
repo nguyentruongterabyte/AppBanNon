@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.model.SanPham;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHolder> {
@@ -38,7 +39,9 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         SanPham sanPham = array.get(position);
         holder.tvTen.setText(sanPham.getTenSanPham());
-        holder.tvGia.setText(sanPham.getGiaSanPham());
+
+        DecimalFormat dft = new DecimalFormat("###,###,###");
+        holder.tvGia.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
         Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
 
     }
@@ -55,7 +58,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
         ImageView image;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvGia = itemView.findViewById(R.id.item_san_pham_gia);
+            tvGia = itemView.findViewById(R.id.item_gia_san_pham);
             tvTen = itemView.findViewById(R.id.item_ten_san_pham);
             image = itemView.findViewById(R.id.item_san_pham_image);
         }
