@@ -21,13 +21,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/item_san_pham_image"
+                android:id="@+id/item_san_pham_moi_image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:src="@drawable/ic_media" />
 
             <TextView
-                android:id="@+id/item_ten_san_pham"
+                android:id="@+id/item_ten_san_pham_moi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -38,7 +38,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/item_gia_san_pham"
+                android:id="@+id/item_gia_san_pham_moi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -47,6 +47,11 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/holo_red_light"/>
         </LinearLayout>
-
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right|top"
+            android:src="@drawable/icon_new" />
     </FrameLayout>
 </androidx.cardview.widget.CardView>

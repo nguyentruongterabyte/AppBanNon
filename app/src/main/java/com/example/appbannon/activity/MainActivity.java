@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,7 +24,7 @@ import android.widget.ViewFlipper;
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.DanhMucAdapter;
-import com.example.appbannon.adapter.SanPhamAdapter;
+import com.example.appbannon.adapter.SanPhamMoiAdapter;
 import com.example.appbannon.model.DanhMuc;
 import com.example.appbannon.model.SanPham;
 import com.example.appbannon.retrofit.ApiBanHang;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewManHinhChinh;
     DrawerLayout drawerLayout;
     DanhMucAdapter danhMucAdapter;
-    SanPhamAdapter sanPhamAdapter;
+    SanPhamMoiAdapter sanPhamAdapter;
     List<DanhMuc> mangDanhMuc;
     List<SanPham> mangSanPham;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -63,21 +65,44 @@ public class MainActivity extends AppCompatActivity {
         if (isConnected(this)) {
             ActionViewFlipper();
             getDanhMuc();
-            getDanhSachSanPham();
+            getDanhSachSanPhamMoi();
+            getEventClick();
         } else {
             Toast.makeText(getApplicationContext(), "Không có internet, vui lòng kết nối wifi", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void getDanhSachSanPham() {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPham()
+    private void getEventClick() {
+        listViewManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        Intent trangChu = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(trangChu);
+                        break;
+                    case 1:
+                        Intent danhSachSanPham = new Intent(getApplicationContext(), DanhSachSanPhamActivity.class);
+                        startActivity(danhSachSanPham);
+                        break;
+                    case 2:
+                        Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+                        startActivity(gioHang);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void getDanhSachSanPhamMoi() {
+        compositeDisposable.add(apiBanHang.getDanhSachSanPhamMoi()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     sanPhamModel -> {
                         if (sanPhamModel.isSuccess()) {
                             mangSanPham = sanPhamModel.getResult();
-                            sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
+                            sanPhamAdapter = new SanPhamMoiAdapter(getApplicationContext(), mangSanPham);
                             recyclerViewManHinhChinh.setAdapter(sanPhamAdapter);
                         }
                     }, throwable -> {

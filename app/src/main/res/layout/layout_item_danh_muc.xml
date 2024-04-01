@@ -2,8 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="15dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
 
     <ImageView
         android:id="@+id/item_danh_muc_image"
@@ -14,12 +17,15 @@
 
     <TextView
         android:id="@+id/item_ten_danh_muc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:minWidth="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
-        android:text="Nón lưỡi trai"
+        android:text="Trang chủ"
         android:textColor="#F44336"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        />
 </LinearLayout>

@@ -17,25 +17,26 @@ import com.example.appbannon.model.SanPham;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHolder> {
+public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.MyViewHolder> {
+
     Context context;
     List<SanPham> array;
 
-    public SanPhamAdapter(Context context, List<SanPham> array) {
+    public SanPhamMoiAdapter(Context context, List<SanPham> array) {
         this.context = context;
         this.array = array;
     }
 
     @NonNull
     @Override
-    public SanPhamAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_san_pham, parent, false);
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_san_pham_moi, parent, false);
 
         return new MyViewHolder(item);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SanPhamAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         SanPham sanPham = array.get(position);
         holder.tvTen.setText(sanPham.getTenSanPham());
 
@@ -57,9 +58,9 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.MyViewHo
         ImageView image;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTen = itemView.findViewById(R.id.item_ten_san_pham);
-            tvGia = itemView.findViewById(R.id.item_gia_san_pham);
-            image = itemView.findViewById(R.id.item_san_pham_image);
+            tvGia = itemView.findViewById(R.id.item_gia_san_pham_moi);
+            tvTen = itemView.findViewById(R.id.item_ten_san_pham_moi);
+            image = itemView.findViewById(R.id.item_san_pham_moi_image);
         }
     }
 }
