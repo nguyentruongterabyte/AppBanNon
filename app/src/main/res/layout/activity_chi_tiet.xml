@@ -26,12 +26,13 @@
             android:id="@+id/imageChiTiet"
             android:layout_width="150dp"
             android:layout_height="200dp"
-            android:src="@drawable/samsung" />
+            android:src="@drawable/samsung"
+            android:contentDescription="@string/todo" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -40,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Tên sản phẩm"
+                android:text="@string/hatName"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -48,30 +49,33 @@
                 android:id="@+id/tvGiaSanPham"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="Giá: 25,000 đ"
+                android:text="@string/hatCost"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/spinnerSo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp" />
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/spinner"
+                android:gravity="center" />
 
             <Button
                 android:id="@+id/btnThemVaoGioHang"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="10dp"
                 android:backgroundTint="#47B1BB"
-                android:text="Thêm vào giỏ hàng" />
+                android:textSize="12sp"
+                android:text="@string/addCart" />
         </LinearLayout>
 
     </LinearLayout>
@@ -88,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text="Mô tả chi tiết sản phẩm"
+            android:text="@string/hatDescribe"
             android:textStyle="bold"
             android:textSize="15sp"
             />
@@ -101,9 +105,9 @@
                 android:id="@+id/tvMoTaChiTiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="TextView" />
+                android:text="@string/describeExample" />
         </ScrollView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

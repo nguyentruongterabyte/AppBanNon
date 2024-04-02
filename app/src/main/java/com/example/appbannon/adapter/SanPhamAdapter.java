@@ -63,6 +63,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if (!isLongClick) {
                         // click vào item
                         Intent intent = new Intent(context, ChiTietActivity.class);
+                        intent.putExtra("chiTietSanPham", sanPham);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }

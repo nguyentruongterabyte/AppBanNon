@@ -2,4 +2,9 @@
     <string name="app_name">AppBanNon</string>
     <string name="hat_name">Nón lưỡi trai</string>
     <string name="hatCost">Giá: 250000</string>
+    <string name="hatName">Tên sản phẩm</string>
+    <string name="addCart">Thêm vào giỏ hàng</string>
+    <string name="hatDescribe">Mô tả chi tiết sản phẩm</string>
+    <string name="describeExample">Màu sắc \n Số lương \n Giới tính</string>
+    <string name="todo">TODO</string>
 </resources>
