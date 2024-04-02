@@ -1,6 +1,7 @@
 package com.example.appbannon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.appbannon.Interface.ItemClickListener;
 import com.example.appbannon.R;
+import com.example.appbannon.activity.ChiTietActivity;
 import com.example.appbannon.model.SanPham;
 
 import java.text.DecimalFormat;
@@ -44,6 +47,17 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
         holder.tvGia.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
         Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
 
+        holder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onClick(View view, int pos, boolean isLongClick) {
+                if (!isLongClick) {
+                    Intent intent = new Intent(context, ChiTietActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -52,15 +66,26 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
     }
 
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvGia, tvTen;
         ImageView image;
+        private ItemClickListener itemClickListener;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvGia = itemView.findViewById(R.id.item_gia_san_pham_moi);
             tvTen = itemView.findViewById(R.id.item_ten_san_pham_moi);
             image = itemView.findViewById(R.id.item_san_pham_moi_image);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setItemClickListener(ItemClickListener itemClickListener) {
+            this.itemClickListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onClick(v, getAdapterPosition(), false);
         }
     }
 }

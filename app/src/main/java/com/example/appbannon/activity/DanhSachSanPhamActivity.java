@@ -70,7 +70,7 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!isLoading) {
-
+                    // Trong khi user scroll màn hình
                     int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                     if (lastVisibleItemPosition == mangSanPham.size() - 1) {
                         isLoading = true;
@@ -85,7 +85,8 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                // add null
+                // add null vào mảng để hàm getItemViewType xác định được
+                // user kéo đến phần tử cuối cùng
                 mangSanPham.add(null);
                 sanPhamAdapter.notifyItemInserted(mangSanPham.size() - 1);
             }
@@ -113,6 +114,7 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     private void ActionToolBar() {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        // Khi nhấn vào nút trở về thì trở về trang chủ
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

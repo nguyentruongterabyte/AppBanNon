@@ -1,6 +1,7 @@
 package com.example.appbannon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.appbannon.Interface.ItemClickListener;
 import com.example.appbannon.R;
+import com.example.appbannon.activity.ChiTietActivity;
 import com.example.appbannon.model.SanPham;
 
 import java.text.DecimalFormat;
@@ -54,6 +56,18 @@ public class SanPhamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             DecimalFormat dft = new DecimalFormat("###,###,###");
             myViewHolder.tvGia.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
             Glide.with(context).load(sanPham.getHinhAnh()).into(myViewHolder.image);
+
+            myViewHolder.setItemClickListener(new ItemClickListener() {
+                @Override
+                public void onClick(View view, int pos, boolean isLongClick) {
+                    if (!isLongClick) {
+                        // click vào item
+                        Intent intent = new Intent(context, ChiTietActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
         else {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
