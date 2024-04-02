@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="160dp"
     android:layout_height="wrap_content"
     android:elevation="8dp"
@@ -18,13 +19,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <ImageView
                 android:id="@+id/item_san_pham_image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@drawable/ic_media" />
+                android:src="@drawable/ic_media"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/item_ten_san_pham"
@@ -33,7 +36,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="3"
-                android:text="Nón lưỡi trai"
+                android:text="@string/hat_name"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -42,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Giá: 250000"
+                android:text="@string/hatCost"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/holo_red_light"/>

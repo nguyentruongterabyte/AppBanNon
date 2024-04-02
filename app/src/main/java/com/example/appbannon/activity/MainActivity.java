@@ -34,6 +34,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void ActionBar() {
         setSupportActionBar(toolbarManHinhChinh);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbarManHinhChinh.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
         toolbarManHinhChinh.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

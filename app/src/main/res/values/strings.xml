@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AppBanNon</string>
+    <string name="hat_name">Nón lưỡi trai</string>
+    <string name="hatCost">Giá: 250000</string>
 </resources>
