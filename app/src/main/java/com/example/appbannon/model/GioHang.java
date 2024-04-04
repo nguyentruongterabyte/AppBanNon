@@ -1,5 +1,7 @@
 package com.example.appbannon.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class GioHang {
@@ -61,5 +63,17 @@ public class GioHang {
             }
         }
         return index;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "GioHang{" +
+                "maSanPham=" + maSanPham +
+                ", tenSanPham='" + tenSanPham + '\'' +
+                ", giaSanPham='" + giaSanPham + '\'' +
+                ", hinhAnh='" + hinhAnh + '\'' +
+                ", soLuong=" + soLuong +
+                '}';
     }
 }

@@ -12,9 +12,15 @@ import android.widget.TextView;
 
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.GioHangAdapter;
+import com.example.appbannon.model.EventBus.TinhTongEvent;
 import com.example.appbannon.model.GioHang;
 import com.example.appbannon.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +39,16 @@ public class GioHangActivity extends AppCompatActivity {
         setControl();
         initControl();
         ActionToolBar();
+        tinhTongTien();
+    }
+
+    private void tinhTongTien() {
+        long tongTienSP = 0;
+        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
+            tongTienSP += Long.parseLong(Utils.mangGioHang.get(i).getGiaSanPham());
+        }
+        DecimalFormat dft = new DecimalFormat("###,###,###");
+        tvTongTien.setText(dft.format(tongTienSP));
     }
 
     private void initControl() {
@@ -70,6 +86,29 @@ public class GioHangActivity extends AppCompatActivity {
 
         btnMuaHang = findViewById(R.id.btnMuaHang);
 
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Đăng ký vào event bus để bắt sự kiện
+        // người dùng nhấn tăng giảm số lượng
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void eventTinhTien(TinhTongEvent event) {
+        // khi người dùng nhấn vào tăng giảm số lượng
+        // trong giỏ hàng thì event bus sẽ bắt sự
+        // kiện này và gọi hàm tính tổng tiền
+        if (event != null) {
+            tinhTongTien();
+        }
     }
 }

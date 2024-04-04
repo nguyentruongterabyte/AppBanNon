@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,18 +51,19 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ListView listViewManHinhChinh;
     DrawerLayout drawerLayout;
+    NotificationBadge badgeGioHang;
+    FrameLayout frameLayoutGioHang;
     DanhMucAdapter danhMucAdapter;
     SanPhamMoiAdapter sanPhamAdapter;
     List<DanhMuc> mangDanhMuc;
     List<SanPham> mangSanPham;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    ApiBanHang apiBanHang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+
         setControl();
         ActionBar();
         ActionViewFlipper();
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
          // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
         CartApiCalls.getAll(gioHangList -> {
             Utils.mangGioHang = gioHangList;
+            badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
         }, compositeDisposable);
     }
 
@@ -95,13 +99,17 @@ public class MainActivity extends AppCompatActivity {
                         Intent danhSachSanPham = new Intent(getApplicationContext(), DanhSachSanPhamActivity.class);
                         startActivity(danhSachSanPham);
                         break;
-                    case 2:
-                        Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
-                        startActivity(gioHang);
-                        break;
                 }
             }
         });
+        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+                startActivity(gioHang);
+            }
+        });
+
     }
 
     private void getDanhSachSanPhamMoi() {
@@ -169,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigationView);
         listViewManHinhChinh = findViewById(R.id.listViewManHinhChinh);
         drawerLayout = findViewById(R.id.drawerLayout);
+
+        badgeGioHang = findViewById(R.id.menuSoLuong);
+        frameLayoutGioHang = findViewById(R.id.frameGioHangManHinhChinh);
 //        Khởi tạo list
         mangDanhMuc = new ArrayList<>();
         mangSanPham = new ArrayList<>();
@@ -193,5 +204,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         compositeDisposable.clear();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
     }
 }

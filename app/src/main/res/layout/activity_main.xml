@@ -21,6 +21,24 @@
                 android:background="#ff00dfff"
                 android:paddingLeft="10dp"
                 app:title="Trang chính">
+                <FrameLayout
+                    android:id="@+id/frameGioHangManHinhChinh"
+                    android:layout_gravity="right"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    tools:ignore="RtlHardcoded">
+                    <com.nex3z.notificationbadge.NotificationBadge
+                        android:id="@+id/menuSoLuong"
+                        android:layout_gravity="top|right"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"/>
+                    <ImageView
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_cart_shopping"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="@string/cartShopping" />
+                </FrameLayout>
 
             </androidx.appcompat.widget.Toolbar>
 

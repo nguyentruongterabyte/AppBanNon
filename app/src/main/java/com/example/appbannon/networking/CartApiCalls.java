@@ -25,6 +25,9 @@ public class CartApiCalls {
                         gioHangModel -> {
                             if (gioHangModel.isSuccess()) {
                                callback.accept(gioHangModel.getResult());
+                               for (int i = 0; i < gioHangModel.getResult().size(); i++) {
+                                   System.out.println("san pham " + i + ": " +  gioHangModel.getResult().get(i).toString());
+                               }
                             } else {
                                 callback.accept(new ArrayList<>());
                             }
