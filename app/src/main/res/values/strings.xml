@@ -8,4 +8,10 @@
     <string name="describeExample">Màu sắc \n Số lương \n Giới tính</string>
     <string name="todo">TODO</string>
     <string name="cartShopping">Giỏ hàng</string>
+    <string name="totalTitle">Tổng tiền:</string>
+    <string name="total">50.000 đ</string>
+    <string name="buttonPurchaseContent">Mua hàng</string>
+    <string name="emptyCart">Giỏ hàng trống</string>
+    <string name="itemCartCost">15,000đ</string>
+    <string name="productCartQuantity">1</string>
 </resources>
