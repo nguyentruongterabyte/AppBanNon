@@ -7,4 +7,5 @@
     <string name="hatDescribe">Mô tả chi tiết sản phẩm</string>
     <string name="describeExample">Màu sắc \n Số lương \n Giới tính</string>
     <string name="todo">TODO</string>
+    <string name="cartShopping">Giỏ hàng</string>
 </resources>

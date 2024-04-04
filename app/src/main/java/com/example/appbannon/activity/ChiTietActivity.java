@@ -3,20 +3,34 @@ package com.example.appbannon.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
+import com.example.appbannon.model.GioHang;
 import com.example.appbannon.model.SanPham;
+import com.example.appbannon.retrofit.ApiBanHang;
+import com.example.appbannon.retrofit.RetrofitClient;
+import com.example.appbannon.utils.Utils;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ChiTietActivity extends AppCompatActivity {
 
@@ -24,19 +38,91 @@ public class ChiTietActivity extends AppCompatActivity {
     Button btnThemVaoGioHang;
     ImageView imageChiTiet;
     Spinner spinnerSo;
+    NotificationBadge badgeGioHang;
     Toolbar toolbar;
+    SanPham sanPham;
+    ApiBanHang apiBanHang;
+
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet);
+        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         setControl();
         ActionToolBar();
         initData();
+        setEvent();
+    }
+
+    private void setEvent() {
+        btnThemVaoGioHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                themVaoGioHang();
+            }
+        });
+    }
+
+    private void themVaoGioHang() {
+        if (Utils.mangGioHang.size() > 0) {
+
+            // biến flag để đánh dấu có tồn tại sản phẩm ở trong mảng giỏ hàng hay không
+            // flag = false: không tồn tại
+            // flag = true: tồn tại
+            boolean flag = false;
+            int soLuong = Integer.parseInt(spinnerSo.getSelectedItem().toString());
+            // Lặp qua mảng giỏ hàng xem có sản phẩm nào trùng mã sản phẩm
+            // thêm vào giỏ hàng không
+            for (int i = 0; i < Utils.mangGioHang.size(); i++) {
+                if (Utils.mangGioHang.get(i).getMaSanPham() == sanPham.getMaSanPham()) {
+                    // Cập nhật số lượng sản phẩm đã có trong danh sách giỏ hàng (api)
+                    int soLuongMoi = soLuong + Utils.mangGioHang.get(i).getSoLuong();
+                    // set số lượng mới cho sản phẩm trong giỏ hàng
+                    Utils.mangGioHang.get(i).setSoLuong(soLuongMoi);
+                    long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuongMoi;
+                    // Set giá mới cho sản phẩm trong giỏ hàng
+                    Utils.mangGioHang.get(i).setGiaSanPham(String.valueOf(gia));
+                    flag = true;
+                    }
+
+            }
+            if (!flag) {
+                // Sau khi kiểm tra trong mảng giỏ hàng nếu sản phẩm chưa tồn tại
+                // trong mảng giỏ hàng thì thực hiện add sản phẩm vào giỏ hàng
+                long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuong;
+                // Lưu sản phẩm vào bảng giỏ hàng trong database
+                GioHang gioHang = new GioHang();
+                gioHang.setMaSanPham(sanPham.getMaSanPham());
+                gioHang.setTenSanPham(sanPham.getTenSanPham());
+                gioHang.setSoLuong(soLuong);
+                gioHang.setHinhAnh(sanPham.getHinhAnh());
+                gioHang.setGiaSanPham(String.valueOf(gia));
+                Utils.mangGioHang.add(gioHang);
+
+                Toast.makeText(getApplicationContext(), "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
+
+            }
+        } else {
+            // Lấy số lượng từ spinner số lượng
+            int soLuong = Integer.parseInt(spinnerSo.getSelectedItem().toString());
+            // giá = giá sản phẩm * số lượng
+            long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuong;
+            // Lưu sản phẩm vào bảng giỏ hàng trong database
+            GioHang gioHang = new GioHang();
+            gioHang.setMaSanPham(sanPham.getMaSanPham());
+            gioHang.setTenSanPham(sanPham.getTenSanPham());
+            gioHang.setSoLuong(soLuong);
+            gioHang.setHinhAnh(sanPham.getHinhAnh());
+            gioHang.setGiaSanPham(String.valueOf(gia));
+            Utils.mangGioHang.add(gioHang);
+        }
+        badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
     }
 
     private void initData() {
-        SanPham sanPham = (SanPham) getIntent().getSerializableExtra("chiTietSanPham" );
+        sanPham = (SanPham) getIntent().getSerializableExtra("chiTietSanPham" );
 //        assert sanPham != null;
         if (sanPham != null) {
             DecimalFormat dft = new DecimalFormat("###,###,###");
@@ -68,6 +154,11 @@ public class ChiTietActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
 
+        badgeGioHang = findViewById(R.id.menu_sl);
+
+        if (Utils.mangGioHang != null) {
+            badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+        }
     }
 
     private void ActionToolBar() {
@@ -79,5 +170,11 @@ public class ChiTietActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
     }
 }

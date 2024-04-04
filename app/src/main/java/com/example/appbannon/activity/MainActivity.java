@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         setControl();
         ActionBar();
         ActionViewFlipper();
+        initData();
         if (isConnected(this)) {
             ActionViewFlipper();
             getDanhMuc();
@@ -71,6 +72,23 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Không có internet, vui lòng kết nối wifi", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void initData() {
+        // get danh sách giỏ hàng về lưu vào mảng mangGioHang
+//        compositeDisposable.add(apiBanHang.getDanhSachSanPhamTrongGioHang()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        gioHangModel -> {
+//                            if (gioHangModel.isSuccess()) {
+//                                Utils.mangGioHang = gioHangModel.getResult();
+//                                System.out.println("abcd: " + Utils.mangGioHang.size());
+//                            }
+//                        }, throwable -> {
+//                            Toast.makeText(getApplicationContext(), "Không kết nối được với server", Toast.LENGTH_SHORT).show();
+//                        }
+//                ));
     }
 
     private void getEventClick() {
@@ -180,9 +198,14 @@ public class MainActivity extends AppCompatActivity {
 //        Khởi tạo list
         mangDanhMuc = new ArrayList<>();
         mangSanPham = new ArrayList<>();
+        if (Utils.mangGioHang == null) {
+            Utils.mangGioHang = new ArrayList<>();
+        }
 //        Khởi tạo adapter
         danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
         listViewManHinhChinh.setAdapter(danhMucAdapter);
+
+
     }
 
     private boolean isConnected(Context context) {
