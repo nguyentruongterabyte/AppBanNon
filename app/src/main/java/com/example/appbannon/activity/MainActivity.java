@@ -27,6 +27,9 @@ import com.example.appbannon.adapter.DanhMucAdapter;
 import com.example.appbannon.adapter.SanPhamMoiAdapter;
 import com.example.appbannon.model.DanhMuc;
 import com.example.appbannon.model.SanPham;
+import com.example.appbannon.networking.CartApiCalls;
+import com.example.appbannon.networking.CategoryApiCalls;
+import com.example.appbannon.networking.ProductApiCalls;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
@@ -36,9 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,20 +76,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        // get danh sách giỏ hàng về lưu vào mảng mangGioHang
-//        compositeDisposable.add(apiBanHang.getDanhSachSanPhamTrongGioHang()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        gioHangModel -> {
-//                            if (gioHangModel.isSuccess()) {
-//                                Utils.mangGioHang = gioHangModel.getResult();
-//                                System.out.println("abcd: " + Utils.mangGioHang.size());
-//                            }
-//                        }, throwable -> {
-//                            Toast.makeText(getApplicationContext(), "Không kết nối được với server", Toast.LENGTH_SHORT).show();
-//                        }
-//                ));
+         // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
+        CartApiCalls.getAll(gioHangList -> {
+            Utils.mangGioHang = gioHangList;
+        }, compositeDisposable);
     }
 
     private void getEventClick() {
@@ -114,36 +105,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getDanhSachSanPhamMoi() {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPhamMoi()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    sanPhamModel -> {
-                        if (sanPhamModel.isSuccess()) {
-                            mangSanPham = sanPhamModel.getResult();
-                            sanPhamAdapter = new SanPhamMoiAdapter(getApplicationContext(), mangSanPham);
-                            recyclerViewManHinhChinh.setAdapter(sanPhamAdapter);
-                        }
-                    }, throwable -> {
-                            Toast.makeText(getApplicationContext(), "Không kết nối được với server", Toast.LENGTH_SHORT).show();
-                    }
-                )
-        );
+        ProductApiCalls.get10(sanPhamMoiList -> {
+            mangSanPham = sanPhamMoiList;
+            sanPhamAdapter = new SanPhamMoiAdapter(getApplicationContext(), mangSanPham);
+            recyclerViewManHinhChinh.setAdapter(sanPhamAdapter);
+        }, compositeDisposable);
     }
 
     private void getDanhMuc() {
-        compositeDisposable.add(apiBanHang.getDanhMuc()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        danhMucModel -> {
-                            if (danhMucModel.isSuccess()) {
-                                mangDanhMuc = danhMucModel.getResult();
-                                danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
-                                listViewManHinhChinh.setAdapter(danhMucAdapter);
-                            }
-                        }
-                ));
+        CategoryApiCalls.get(danhMucList -> {
+            mangDanhMuc = danhMucList;
+            danhMucAdapter = new DanhMucAdapter(mangDanhMuc, getApplicationContext());
+            listViewManHinhChinh.setAdapter(danhMucAdapter);
+        }, compositeDisposable);
     }
 
     private void ActionViewFlipper() {
@@ -163,11 +137,11 @@ public class MainActivity extends AppCompatActivity {
         viewFlipper.setAutoStart(true);
 
 //        Set animation cho view flipper
-        Animation slide_in = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_right);
-        Animation slide_out = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
+        Animation slideIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_right);
+        Animation slideOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
 
-        viewFlipper.setInAnimation(slide_in);
-        viewFlipper.setOutAnimation(slide_out);
+        viewFlipper.setInAnimation(slideIn);
+        viewFlipper.setOutAnimation(slideOut);
 
     }
 

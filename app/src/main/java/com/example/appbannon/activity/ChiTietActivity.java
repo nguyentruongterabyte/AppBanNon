@@ -3,33 +3,31 @@ package com.example.appbannon.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.model.GioHang;
 import com.example.appbannon.model.SanPham;
+import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ChiTietActivity extends AppCompatActivity {
@@ -41,7 +39,7 @@ public class ChiTietActivity extends AppCompatActivity {
     NotificationBadge badgeGioHang;
     Toolbar toolbar;
     SanPham sanPham;
-    ApiBanHang apiBanHang;
+
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -49,7 +47,6 @@ public class ChiTietActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet);
-        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         setControl();
         ActionToolBar();
         initData();
@@ -65,7 +62,10 @@ public class ChiTietActivity extends AppCompatActivity {
         });
     }
 
+    // hàm xử lý khi nhấn nút thêm vào giỏ hàng
     private void themVaoGioHang() {
+        // Nếu size của mảng giỏ hàng > 0 thì phải kiểm tra từng phần tử có
+        // bị lặp với sản phẩm vừa thêm vào giỏ hay không
         if (Utils.mangGioHang.size() > 0) {
 
             // biến flag để đánh dấu có tồn tại sản phẩm ở trong mảng giỏ hàng hay không
@@ -77,15 +77,30 @@ public class ChiTietActivity extends AppCompatActivity {
             // thêm vào giỏ hàng không
             for (int i = 0; i < Utils.mangGioHang.size(); i++) {
                 if (Utils.mangGioHang.get(i).getMaSanPham() == sanPham.getMaSanPham()) {
+                    GioHang gioHangCu = Utils.mangGioHang.get(i);
                     // Cập nhật số lượng sản phẩm đã có trong danh sách giỏ hàng (api)
-                    int soLuongMoi = soLuong + Utils.mangGioHang.get(i).getSoLuong();
+                    int soLuongMoi = soLuong + gioHangCu.getSoLuong();
                     // set số lượng mới cho sản phẩm trong giỏ hàng
                     Utils.mangGioHang.get(i).setSoLuong(soLuongMoi);
                     long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuongMoi;
                     // Set giá mới cho sản phẩm trong giỏ hàng
                     Utils.mangGioHang.get(i).setGiaSanPham(String.valueOf(gia));
+
                     flag = true;
-                    }
+
+                    // update lại giá và số lượng sản phẩm trong giỏ hàng database
+                    CartApiCalls.update(Utils.mangGioHang.get(i), isSuccess -> {
+                        if (isSuccess) {
+                            badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+                        } else {
+                            int index = GioHang.indexOf(Utils.mangGioHang, gioHangCu);
+                            if (index != -1) {
+                                Utils.mangGioHang.set(index, gioHangCu);
+                            }
+                        }
+                    }, compositeDisposable);
+
+                }
 
             }
             if (!flag) {
@@ -99,9 +114,16 @@ public class ChiTietActivity extends AppCompatActivity {
                 gioHang.setSoLuong(soLuong);
                 gioHang.setHinhAnh(sanPham.getHinhAnh());
                 gioHang.setGiaSanPham(String.valueOf(gia));
-                Utils.mangGioHang.add(gioHang);
 
-                Toast.makeText(getApplicationContext(), "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
+
+                // Thêm sản phẩm vào giỏ hàng trong database
+                CartApiCalls.add(gioHang, isSuccess -> {
+                    if (isSuccess) {
+                        Utils.mangGioHang.add(gioHang);
+                        badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+                    }
+                }, compositeDisposable);
+
 
             }
         } else {
@@ -109,16 +131,21 @@ public class ChiTietActivity extends AppCompatActivity {
             int soLuong = Integer.parseInt(spinnerSo.getSelectedItem().toString());
             // giá = giá sản phẩm * số lượng
             long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuong;
-            // Lưu sản phẩm vào bảng giỏ hàng trong database
+
             GioHang gioHang = new GioHang();
             gioHang.setMaSanPham(sanPham.getMaSanPham());
             gioHang.setTenSanPham(sanPham.getTenSanPham());
             gioHang.setSoLuong(soLuong);
             gioHang.setHinhAnh(sanPham.getHinhAnh());
             gioHang.setGiaSanPham(String.valueOf(gia));
-            Utils.mangGioHang.add(gioHang);
+
+            // Thêm sản phẩm vào giỏ hàng trong database
+            CartApiCalls.add(gioHang, isSuccess -> {
+                Utils.mangGioHang.add(gioHang);
+                badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+            }, compositeDisposable);
         }
-        badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+
     }
 
     private void initData() {

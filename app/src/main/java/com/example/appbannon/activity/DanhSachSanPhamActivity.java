@@ -1,13 +1,5 @@
 package com.example.appbannon.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -15,12 +7,18 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.SanPhamAdapter;
-import com.example.appbannon.adapter.SanPhamMoiAdapter;
 import com.example.appbannon.model.SanPham;
+import com.example.appbannon.networking.ProductApiCalls;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
@@ -29,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DanhSachSanPhamActivity extends AppCompatActivity {
 
@@ -124,33 +120,20 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     }
 
     private void getDanhSachSanPham(int page) {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPham(page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        sanPhamModel -> {
-                            if (sanPhamModel.isSuccess()) {
-                                if (sanPhamAdapter == null) {
-                                    mangSanPham = sanPhamModel.getResult();
-                                    sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
-                                    recyclerViewDSSanPham.setAdapter(sanPhamAdapter);
-                                } else {
-                                    int pos = mangSanPham.size() - 1;
-                                    int soLuongAdd = sanPhamModel.getResult().size();
-                                    for (int i = 0; i < soLuongAdd; i++) {
-                                        mangSanPham.add(sanPhamModel.getResult().get(i));
-                                    }
 
-                                    sanPhamAdapter.notifyItemRangeInserted(pos, soLuongAdd);
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Hết dữ liệu rồi", Toast.LENGTH_SHORT).show();
-                                isLoading = true;
-                            }
-                        }, throwable -> {
-                            Toast.makeText(getApplicationContext(), "Không kết nối được với server", Toast.LENGTH_SHORT).show();
-                        }
-                ));
+        ProductApiCalls.getInAPage(page, sanPhamList -> {
+            if (sanPhamAdapter == null) {
+                mangSanPham = sanPhamList;
+                sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
+                recyclerViewDSSanPham.setAdapter(sanPhamAdapter);
+            } else {
+                int pos = mangSanPham.size() - 1;
+                int soLuongAdd = sanPhamList.size();
+                for (int i = 0; i < soLuongAdd; i++) {
+                    mangSanPham.add(sanPhamList.get(i));
+                }
+            }
+        }, compositeDisposable);
     }
 
     private void setControl() {

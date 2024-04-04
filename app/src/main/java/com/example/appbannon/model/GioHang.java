@@ -1,5 +1,7 @@
 package com.example.appbannon.model;
 
+import java.util.List;
+
 public class GioHang {
     private int maSanPham;
     private String tenSanPham;
@@ -48,5 +50,16 @@ public class GioHang {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+
+    public static int indexOf(List<GioHang> mangGioHang, GioHang gioHang) {
+        int index = -1;
+        for (int i = 0; i < mangGioHang.size(); i++) {
+            if (mangGioHang.get(i).getMaSanPham() == gioHang.getMaSanPham()) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }
