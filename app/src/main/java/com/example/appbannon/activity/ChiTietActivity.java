@@ -3,10 +3,12 @@ package com.example.appbannon.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ public class ChiTietActivity extends AppCompatActivity {
     ImageView imageChiTiet;
     Spinner spinnerSo;
     NotificationBadge badgeGioHang;
+    FrameLayout frameLayoutGioHang;
     Toolbar toolbar;
     SanPham sanPham;
 
@@ -58,6 +61,14 @@ public class ChiTietActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 themVaoGioHang();
+            }
+        });
+
+        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+                startActivity(gioHang);
             }
         });
     }
@@ -182,6 +193,8 @@ public class ChiTietActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
 
         badgeGioHang = findViewById(R.id.menu_sl);
+
+        frameLayoutGioHang = findViewById(R.id.frameGioHang);
 
         if (Utils.mangGioHang != null) {
             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));

@@ -10,10 +10,12 @@
         android:id="@+id/tvGioHangTrong"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/emptyCart"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
