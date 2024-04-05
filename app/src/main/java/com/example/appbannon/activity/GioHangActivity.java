@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.GioHangAdapter;
@@ -33,6 +34,8 @@ public class GioHangActivity extends AppCompatActivity {
     RecyclerView recyclerViewGioHang;
     GioHangAdapter adapter;
 
+    long tongTienSP;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,14 +51,19 @@ public class GioHangActivity extends AppCompatActivity {
         btnMuaHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
-                startActivity(intent);
+                if (Utils.mangMuaHang.size() == 0) {
+                    Toast.makeText(GioHangActivity.this, "Bạn phải chọn ít nhất 1 sản phẩm", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
+                    intent.putExtra("tongTien", tongTienSP);
+                    startActivity(intent);
+                }
             }
         });
     }
 
     private void tinhTongTien() {
-        long tongTienSP = 0;
+        tongTienSP = 0;
         for (int i = 0; i < Utils.mangMuaHang.size(); i++) {
             tongTienSP += Long.parseLong(Utils.mangMuaHang.get(i).getGiaSanPham());
         }

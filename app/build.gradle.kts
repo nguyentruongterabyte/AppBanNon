@@ -58,4 +58,7 @@ dependencies {
 
     // momo
     // implementation("com.github.momo-wallet:mobile-sdk:1.0.7");
+
+    // gson
+    implementation("com.google.code.gson:gson:2.10.1");
 }
