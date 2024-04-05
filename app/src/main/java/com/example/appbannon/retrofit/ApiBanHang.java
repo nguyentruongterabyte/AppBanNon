@@ -10,7 +10,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 
 public interface ApiBanHang {
     @GET("danhmuc.php")
@@ -39,6 +38,12 @@ public interface ApiBanHang {
             @Field("maSanPham") int maSanPham,
             @Field("gia") String gia,
             @Field("soLuong") int soLuong
+    );
+
+    @POST("xoasanphamkhoigiohang.php")
+    @FormUrlEncoded
+    Observable<GioHangModel> xoaSanPhamKhoiGioHang(
+            @Field("maSanPham") int maSanPham
     );
 
     @POST("danhsachsanpham.php")

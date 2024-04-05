@@ -14,4 +14,8 @@
     <string name="emptyCart">Giỏ hàng trống</string>
     <string name="itemCartCost">15,000đ</string>
     <string name="productCartQuantity">1</string>
+    <string name="phoneNumber">0948915051</string>
+    <string name="email">nguyenthaitruong.entertainment@gmail.com</string>
+    <string name="addressFieldHint">Nhập địa chỉ giao hàng</string>
+    <string name="orderBtn">Đặt hàng</string>
 </resources>

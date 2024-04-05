@@ -217,4 +217,10 @@ public class ChiTietActivity extends AppCompatActivity {
         compositeDisposable.clear();
         super.onDestroy();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+    }
 }

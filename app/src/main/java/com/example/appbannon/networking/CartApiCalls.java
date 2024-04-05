@@ -56,6 +56,8 @@ public class CartApiCalls {
                         )
         );
     }
+
+    // call api cập nhật giá và số lượng của sản phẩm trong giỏ hàng
     public static void update(GioHang gioHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.updateSanPhamTrongGioHang(
                         gioHang.getMaSanPham(),
@@ -71,5 +73,22 @@ public class CartApiCalls {
                         }
                 )
         );
+    }
+
+    // call api xóa sản phẩm khỏi giỏ hàng
+    public static void delete(GioHang gioHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.xoaSanPhamKhoiGioHang(
+                gioHang.getMaSanPham())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        gioHangModel -> {
+                            callback.accept(gioHangModel.isSuccess());
+                        }, throwable -> {
+                            callback.accept(false);
+                        }
+                )
+        );
+
     }
 }

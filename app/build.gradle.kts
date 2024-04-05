@@ -55,4 +55,7 @@ dependencies {
 
     // event bus
     implementation("org.greenrobot:eventbus:3.3.1");
+
+    // momo
+    // implementation("com.github.momo-wallet:mobile-sdk:1.0.7");
 }

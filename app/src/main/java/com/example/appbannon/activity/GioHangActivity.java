@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -39,13 +40,24 @@ public class GioHangActivity extends AppCompatActivity {
         setControl();
         initControl();
         ActionToolBar();
+        setEvent();
         tinhTongTien();
+    }
+
+    private void setEvent() {
+        btnMuaHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void tinhTongTien() {
         long tongTienSP = 0;
-        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
-            tongTienSP += Long.parseLong(Utils.mangGioHang.get(i).getGiaSanPham());
+        for (int i = 0; i < Utils.mangMuaHang.size(); i++) {
+            tongTienSP += Long.parseLong(Utils.mangMuaHang.get(i).getGiaSanPham());
         }
         DecimalFormat dft = new DecimalFormat("###,###,###");
         tvTongTien.setText(dft.format(tongTienSP));
@@ -94,6 +106,7 @@ public class GioHangActivity extends AppCompatActivity {
         // Đăng ký vào event bus để bắt sự kiện
         // người dùng nhấn tăng giảm số lượng
         EventBus.getDefault().register(this);
+
     }
 
     @Override
