@@ -2,11 +2,13 @@ package com.example.appbannon.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,10 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.SanPhamAdapter;
 import com.example.appbannon.model.SanPham;
+import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.networking.ProductApiCalls;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,8 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     SanPhamAdapter sanPhamAdapter;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     Toolbar toolbar;
+    NotificationBadge badgeGioHang;
+    FrameLayout frameLayoutGioHang;
     LinearLayoutManager layoutManager;
     Handler handler = new Handler();
     boolean isLoading = false;
@@ -50,9 +56,29 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
         apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         setControl();
         ActionToolBar();
+        initData();
         getDanhSachSanPham(page);
         addEventLoad();
+        setEventClick();
 
+    }
+
+    private void setEventClick() {
+        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+                startActivity(gioHang);
+            }
+        });
+    }
+
+    private void initData() {
+        // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
+        CartApiCalls.getAll(gioHangList -> {
+            Utils.mangGioHang = gioHangList;
+            badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+        }, compositeDisposable);
     }
 
     private void addEventLoad() {
@@ -145,6 +171,9 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
         recyclerViewDSSanPham.setLayoutManager(layoutManager);
         recyclerViewDSSanPham.setHasFixedSize(true);
 
+        badgeGioHang = findViewById(R.id.menuSoLuong);
+        frameLayoutGioHang = findViewById(R.id.frameGioHangManHinhChinh);
+
         mangSanPham = new ArrayList<>();
     }
 
@@ -159,5 +188,11 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     protected void onDestroy() {
         compositeDisposable.clear();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
     }
 }

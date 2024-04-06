@@ -2,6 +2,7 @@ package com.example.appbannon.retrofit;
 
 
 import com.example.appbannon.model.DanhMucModel;
+import com.example.appbannon.model.DonHangModel;
 import com.example.appbannon.model.GioHangModel;
 import com.example.appbannon.model.SanPhamModel;
 
@@ -50,6 +51,17 @@ public interface ApiBanHang {
     @FormUrlEncoded
     Observable<SanPhamModel> getDanhSachSanPham(
             @Field("page") int page
+    );
+
+    @POST("donhang.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> createDonHang(
+            @Field("sdt") String sdt,
+            @Field("email") String email,
+            @Field("tongTien") String tongTien,
+            @Field("diaChi") String diaChi,
+            @Field("soLuong") int soLuong,
+            @Field("chiTiet") String chiTiet
     );
 
 }

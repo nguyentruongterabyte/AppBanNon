@@ -1,11 +1,8 @@
 package com.example.appbannon.model;
 
-import java.util.List;
-
-public class DanhMucModel {
+public class DonHangModel {
     private boolean success;
     private String message;
-    private List<DanhMuc> result;
 
     public boolean isSuccess() {
         return success;
@@ -21,13 +18,5 @@ public class DanhMucModel {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public List<DanhMuc> getResult() {
-        return result;
-    }
-
-    public void setResult(List<DanhMuc> result) {
-        this.result = result;
     }
 }
