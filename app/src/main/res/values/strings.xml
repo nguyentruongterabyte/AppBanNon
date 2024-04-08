@@ -19,4 +19,6 @@
     <string name="addressFieldHint">Nhập địa chỉ giao hàng</string>
     <string name="orderBtn">Đặt hàng</string>
     <string name="zaloPayButton">Đặt hàng và thanh toán bằng zalo pay</string>
+    <string name="icSearchDescription">Tìm kiếm sản phẩm</string>
+    <string name="searchEditTextHint">Nhập sản phẩm cần tìm</string>
 </resources>

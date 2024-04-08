@@ -54,6 +54,12 @@ public interface ApiBanHang {
             @Field("page") int page
     );
 
+    @POST("timkiemsanpham.php")
+    @FormUrlEncoded
+    Observable<SanPhamModel> getDanhSachSanPhamTimKiem(
+            @Field("key") String key
+    );
+
     @POST("donhang.php")
     @FormUrlEncoded
     Observable<DonHangModel> createDonHang(

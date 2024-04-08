@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.DanhSachSanPhamActivity">
-
+    tools:context=".activity.TimKiemSanPhamActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#B2B4C1"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Danh sách sản phẩm"
+        app:title="Tìm kiếm sản phẩm"
         tools:layout_editor_absoluteX="10dp">
         <LinearLayout
             android:layout_marginRight="15dp"
@@ -22,16 +20,8 @@
             android:layout_gravity="right"
             android:layout_height="?attr/actionBarSize"
             tools:ignore="RtlHardcoded">
-            <ImageView
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:id="@+id/imgSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:src="@drawable/ic_search"
-                android:contentDescription="@string/icSearchDescription" />
             <FrameLayout
-                android:id="@+id/frameGioHangManHinhChinh"
+                android:id="@+id/frameGioHangTimKiem"
                 android:layout_width="55dp"
                 android:layout_height="match_parent"
                 tools:ignore="RtlHardcoded">
@@ -51,14 +41,24 @@
 
 
     </androidx.appcompat.widget.Toolbar>
+    <EditText
+        android:hint="@string/searchEditTextHint"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/edtSearch"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewDSSanPham"
+        android:id="@+id/recyclerViewDSSanPhamTimKiem"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/edtSearch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

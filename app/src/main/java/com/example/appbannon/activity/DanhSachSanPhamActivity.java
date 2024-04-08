@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,7 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     Toolbar toolbar;
     NotificationBadge badgeGioHang;
     FrameLayout frameLayoutGioHang;
+    ImageView imgSearch;
     LinearLayoutManager layoutManager;
     Handler handler = new Handler();
     boolean isLoading = false;
@@ -69,6 +71,14 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
                 startActivity(gioHang);
+            }
+        });
+
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent timKiem = new Intent(getApplicationContext(), TimKiemSanPhamActivity.class);
+                startActivity(timKiem);
             }
         });
     }
@@ -173,16 +183,11 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
 
         badgeGioHang = findViewById(R.id.menuSoLuong);
         frameLayoutGioHang = findViewById(R.id.frameGioHangManHinhChinh);
+        imgSearch = findViewById(R.id.imgSearch);
 
         mangSanPham = new ArrayList<>();
     }
 
-    private boolean isConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        return (wifi != null && wifi.isConnected()) || (mobile != null && mobile.isConnected());
-    }
 
     @Override
     protected void onDestroy() {

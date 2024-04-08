@@ -1,6 +1,7 @@
 package com.example.appbannon.networking;
 
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.appbannon.adapter.SanPhamAdapter;
@@ -55,5 +56,23 @@ public class ProductApiCalls {
                             callback.accept(new ArrayList<>());
                         }
                 ));
+    }
+
+    public static void search(String key, Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.getDanhSachSanPhamTimKiem(key)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        sanPhamModel -> {
+                            if (sanPhamModel.isSuccess()) {
+                                callback.accept(sanPhamModel.getResult());
+                                Log.d("arraySize=", String.valueOf(sanPhamModel.getResult().size()));
+                            } else {
+                                callback.accept(new ArrayList<>());
+                            }
+                        }, throwable -> {
+                            callback.accept(new ArrayList<>());
+                        }
+                        ));
     }
 }
