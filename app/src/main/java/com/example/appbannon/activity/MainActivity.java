@@ -130,9 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void ActionViewFlipper() {
         List<String> mangQuangCao = new ArrayList<>();
-        mangQuangCao.add("https://media.istockphoto.com/id/1184522745/vi/anh/c%C6%B0%E1%BB%A1i-ng%E1%BB%B1a-rodeo-v%C4%83n-h%C3%B3a-mi%E1%BB%81n-t%C3%A2y-hoang-d%C3%A3-ch%E1%BB%A7-%C4%91%E1%BB%81-kh%C3%A1i-ni%E1%BB%87m-%C3%A2m-nh%E1%BA%A1c-%C4%91%E1%BB%93ng-qu%C3%AA-americana-v%C3%A0-m%E1%BB%B9-v%E1%BB%9Bi.jpg?s=1024x1024&w=is&k=20&c=eQWSy0ok0umbVrToBbNZ7hbwTD7-75vgee2EaRDLkDk=");
-        mangQuangCao.add("https://media.istockphoto.com/id/1453988945/vi/anh/m%C5%A9-x%C3%B4-m%C3%A0u-v%C3%A0ng-c%C3%A1ch-ly-tr%C3%AAn-m%C3%A0u-tr%E1%BA%AFng.jpg?s=1024x1024&w=is&k=20&c=x3MA6las9ZkUwCC4f4uD5vbS4YCyGGtrdIxxsirTn3c=");
-        mangQuangCao.add("https://media.istockphoto.com/id/535518012/vi/anh/ph%E1%BB%A5-n%E1%BB%AF-m%C5%A9-xanh-v%E1%BB%9Bi-m%E1%BA%A1ng-che-m%E1%BA%B7t.jpg?s=1024x1024&w=is&k=20&c=O17EaK8ZGJXvPpYGTKWtCMqLyeRQ9BNjrslYXMqQ2Sk=");
+        mangQuangCao.add("https://simg.zalopay.com.vn/zlp-website/assets/emoji_df7627e1d5.png");
+        mangQuangCao.add("https://simg.zalopay.com.vn/zlp-website/assets/Hinh_Thumb_399a769927.jpeg");
+        mangQuangCao.add("https://simg.zalopay.com.vn/zlp-website/assets/Thumb_Gui_tiet_kiem_dbf899ee1a_e200cb7867.jpg");
+        mangQuangCao.add("https://simg.zalopay.com.vn/zlp-website/assets/web_720x360_424_TKTK_MUC_LAI_SUAT_5_7_5d8a3bf64f.jpg");
 
 
         for (int i = 0; i < mangQuangCao.size(); i++) {
@@ -210,5 +211,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+
     }
 }

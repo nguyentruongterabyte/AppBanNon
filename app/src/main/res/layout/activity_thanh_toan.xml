@@ -150,6 +150,21 @@
         android:background="@android:color/holo_blue_light"
         android:text="@string/orderBtn"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayout"
         tools:layout_editor_absoluteX="10dp" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnZaloPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/zaloPayButton"
+        app:layout_constraintTop_toBottomOf="@id/btnDatHang"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="25dp"
+        android:textColor="@color/white"
+        android:background="#008FE5"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

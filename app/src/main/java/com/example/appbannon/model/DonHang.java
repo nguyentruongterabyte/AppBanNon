@@ -1,6 +1,8 @@
 package com.example.appbannon.model;
 
 public class DonHang {
+
+    private String maDonHang;
     private String sdt;
     private String email;
     private String tongTien;
@@ -9,6 +11,14 @@ public class DonHang {
     private String chiTiet;
 
     public DonHang() {
+    }
+
+    public String getMaDonHang() {
+        return maDonHang;
+    }
+
+    public void setMaDonHang(String maDonHang) {
+        this.maDonHang = maDonHang;
     }
 
     public String getSdt() {

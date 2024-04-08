@@ -4,6 +4,7 @@ package com.example.appbannon.retrofit;
 import com.example.appbannon.model.DanhMucModel;
 import com.example.appbannon.model.DonHangModel;
 import com.example.appbannon.model.GioHangModel;
+import com.example.appbannon.model.MessageModel;
 import com.example.appbannon.model.SanPhamModel;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -62,6 +63,13 @@ public interface ApiBanHang {
             @Field("diaChi") String diaChi,
             @Field("soLuong") int soLuong,
             @Field("chiTiet") String chiTiet
+    );
+
+    @POST("updatetoken.php")
+    @FormUrlEncoded
+    Observable<MessageModel> updateToken(
+            @Field("token") String token,
+            @Field("id") int idDonHang
     );
 
 }

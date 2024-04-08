@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,7 +34,6 @@ public class GioHangActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerViewGioHang;
     GioHangAdapter adapter;
-
     long tongTienSP;
 
     @Override
@@ -132,4 +132,5 @@ public class GioHangActivity extends AppCompatActivity {
             tinhTongTien();
         }
     }
+
 }
