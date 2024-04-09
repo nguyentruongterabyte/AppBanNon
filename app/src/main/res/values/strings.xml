@@ -21,4 +21,11 @@
     <string name="zaloPayButton">Đặt hàng và thanh toán bằng zalo pay</string>
     <string name="icSearchDescription">Tìm kiếm sản phẩm</string>
     <string name="searchEditTextHint">Nhập sản phẩm cần tìm</string>
+    <string name="login">Đăng nhập</string>
+    <string name="emailTitle">Email</string>
+    <string name="passwordTitle">Mật khẩu</string>
+    <string name="noAccountTitle">Nếu chưa có tài khoản</string>
+    <string name="register">Đăng ký</string>
+    <string name="aldreadyAccountTitle">Đã có tài khoản</string>
+    <string name="rePasswordTitle">Nhập lại mật khẩu</string>
 </resources>

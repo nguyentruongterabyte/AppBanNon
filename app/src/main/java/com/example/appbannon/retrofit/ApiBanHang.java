@@ -17,14 +17,14 @@ public interface ApiBanHang {
     @GET("danhmuc.php")
     Observable<DanhMucModel> getDanhMuc();
 
-    @GET("danhsachsanphammoi.php")
+    @GET("products-featured.php")
     Observable<SanPhamModel> getDanhSachSanPhamMoi();
 
-    @GET("danhsachgiohang.php")
+    @GET("cart-list.php")
     Observable<GioHangModel> getDanhSachSanPhamTrongGioHang();
 
 
-    @POST("themsanphamvaogiohang.php")
+    @POST("cart-create.php")
     @FormUrlEncoded
     Observable<GioHangModel> themSanPhamVaoGioHang(
             @Field("maSanPham") int maSanPham,
@@ -34,7 +34,7 @@ public interface ApiBanHang {
             @Field("soLuong") int soLuong
             );
 
-    @POST("updatesanphamtronggiohang.php")
+    @POST("cart-update-products.php")
     @FormUrlEncoded
     Observable<GioHangModel> updateSanPhamTrongGioHang(
             @Field("maSanPham") int maSanPham,
@@ -42,25 +42,26 @@ public interface ApiBanHang {
             @Field("soLuong") int soLuong
     );
 
-    @POST("xoasanphamkhoigiohang.php")
+    @POST("cart-delete-product.php")
     @FormUrlEncoded
     Observable<GioHangModel> xoaSanPhamKhoiGioHang(
             @Field("maSanPham") int maSanPham
     );
 
-    @POST("danhsachsanpham.php")
+    @POST("products-page.php")
     @FormUrlEncoded
     Observable<SanPhamModel> getDanhSachSanPham(
-            @Field("page") int page
+            @Field("page") int page,
+            @Field("amount") int amount
     );
 
-    @POST("timkiemsanpham.php")
+    @POST("products-search.php")
     @FormUrlEncoded
     Observable<SanPhamModel> getDanhSachSanPhamTimKiem(
             @Field("key") String key
     );
 
-    @POST("donhang.php")
+    @POST("orders-create.php")
     @FormUrlEncoded
     Observable<DonHangModel> createDonHang(
             @Field("sdt") String sdt,
@@ -71,7 +72,7 @@ public interface ApiBanHang {
             @Field("chiTiet") String chiTiet
     );
 
-    @POST("updatetoken.php")
+    @POST("orders-update-token.php")
     @FormUrlEncoded
     Observable<MessageModel> updateToken(
             @Field("token") String token,

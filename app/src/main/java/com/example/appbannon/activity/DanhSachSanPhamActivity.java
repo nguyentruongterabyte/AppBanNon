@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.SanPhamAdapter;
@@ -36,6 +37,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class DanhSachSanPhamActivity extends AppCompatActivity {
 
+    SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerViewDSSanPham;
     ApiBanHang apiBanHang;
     List<SanPham> mangSanPham;
@@ -62,7 +64,17 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
         getDanhSachSanPham(page);
         addEventLoad();
         setEventClick();
+        setEventRefresh();
 
+    }
+
+    private void setEventRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDanhSachSanPham(page);
+            }
+        });
     }
 
     private void setEventClick() {
@@ -163,16 +175,19 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
                 sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
                 recyclerViewDSSanPham.setAdapter(sanPhamAdapter);
             } else {
-                int pos = mangSanPham.size() - 1;
                 int soLuongAdd = sanPhamList.size();
                 for (int i = 0; i < soLuongAdd; i++) {
                     mangSanPham.add(sanPhamList.get(i));
                 }
             }
+            // Once data fetching is complete, call setRefreshing(false) to stop the refreshing animation
+            swipeRefreshLayout.setRefreshing(false);
         }, compositeDisposable);
     }
 
     private void setControl() {
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
         recyclerViewDSSanPham = findViewById(R.id.recyclerViewDSSanPham);
         toolbar = findViewById(R.id.toolbar);
 

@@ -42,7 +42,7 @@ public class ProductApiCalls {
 
     // get sản phẩm trên 1 trang để hiển thị lên màn hình danh sách sản phẩm
     public static void getInAPage(int page, Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPham(page)
+        compositeDisposable.add(apiBanHang.getDanhSachSanPham(page, 6)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
