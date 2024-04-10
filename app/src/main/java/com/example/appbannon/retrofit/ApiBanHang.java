@@ -6,6 +6,7 @@ import com.example.appbannon.model.DonHangModel;
 import com.example.appbannon.model.GioHangModel;
 import com.example.appbannon.model.MessageModel;
 import com.example.appbannon.model.SanPhamModel;
+import com.example.appbannon.model.UserModel;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Field;
@@ -14,15 +15,31 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiBanHang {
+    // Danh mục
     @GET("danhmuc.php")
     Observable<DanhMucModel> getDanhMuc();
 
+
+    // Sản phẩm
     @GET("products-featured.php")
     Observable<SanPhamModel> getDanhSachSanPhamMoi();
 
+    @POST("products-page.php")
+    @FormUrlEncoded
+    Observable<SanPhamModel> getDanhSachSanPham(
+            @Field("page") int page,
+            @Field("amount") int amount
+    );
+
+    @POST("products-search.php")
+    @FormUrlEncoded
+    Observable<SanPhamModel> getDanhSachSanPhamTimKiem(
+            @Field("key") String key
+    );
+
+    // giỏ hàng
     @GET("cart-list.php")
     Observable<GioHangModel> getDanhSachSanPhamTrongGioHang();
-
 
     @POST("cart-create.php")
     @FormUrlEncoded
@@ -48,19 +65,8 @@ public interface ApiBanHang {
             @Field("maSanPham") int maSanPham
     );
 
-    @POST("products-page.php")
-    @FormUrlEncoded
-    Observable<SanPhamModel> getDanhSachSanPham(
-            @Field("page") int page,
-            @Field("amount") int amount
-    );
 
-    @POST("products-search.php")
-    @FormUrlEncoded
-    Observable<SanPhamModel> getDanhSachSanPhamTimKiem(
-            @Field("key") String key
-    );
-
+    // Đơn hàng
     @POST("orders-create.php")
     @FormUrlEncoded
     Observable<DonHangModel> createDonHang(
@@ -77,6 +83,16 @@ public interface ApiBanHang {
     Observable<MessageModel> updateToken(
             @Field("token") String token,
             @Field("id") int idDonHang
+    );
+
+    // user
+    @POST("user-register.php")
+    @FormUrlEncoded
+    Observable<UserModel> dangKy(
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("username") String username,
+            @Field("mobile") String mobile
     );
 
 }

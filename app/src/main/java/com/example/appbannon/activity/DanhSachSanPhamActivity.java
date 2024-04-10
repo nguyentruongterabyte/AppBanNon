@@ -69,29 +69,18 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     }
 
     private void setEventRefresh() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getDanhSachSanPham(page);
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> getDanhSachSanPham(page));
     }
 
     private void setEventClick() {
-        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
-                startActivity(gioHang);
-            }
+        frameLayoutGioHang.setOnClickListener(v -> {
+            Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+            startActivity(gioHang);
         });
 
-        imgSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent timKiem = new Intent(getApplicationContext(), TimKiemSanPhamActivity.class);
-                startActivity(timKiem);
-            }
+        imgSearch.setOnClickListener(v -> {
+            Intent timKiem = new Intent(getApplicationContext(), TimKiemSanPhamActivity.class);
+            startActivity(timKiem);
         });
     }
 
@@ -159,12 +148,7 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         // Khi nhấn vào nút trở về thì trở về trang chủ
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void getDanhSachSanPham(int page) {

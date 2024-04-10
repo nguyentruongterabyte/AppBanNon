@@ -13,7 +13,7 @@
         android:gravity="center"
         android:padding="5dp"
         android:text="@string/register"
-        android:textColor="@color/text_color"
+        android:textColor="#673AB7"
         android:textSize="25sp"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,6 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvDangKy">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtEmailDK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -45,15 +46,15 @@
         app:layout_constraintTop_toBottomOf="@id/line1">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:drawableStart="@drawable/ic_password"
+            android:drawableStart="@drawable/ic_user"
             android:drawablePadding="5dp"
-            android:hint="@string/passwordTitle"
-            android:inputType="textVisiblePassword" />
-
+            android:hint="@string/usernameTitle" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -65,19 +66,116 @@
         app:layout_constraintTop_toBottomOf="@id/line2">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtMobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="number"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:drawableStart="@drawable/ic_pen"
+            android:drawableStart="@drawable/ic_mobile"
             android:drawablePadding="5dp"
-            android:hint="@string/rePasswordTitle"
-            android:inputType="textVisiblePassword" />
-
+            android:hint="@string/mobileTitle" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/line4"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/line3">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout1"
+            style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtPasswordDK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_password"
+                android:drawablePadding="5dp"
+                android:hint="@string/passwordTitle"
+                android:inputType="textPassword"
+                android:paddingEnd="50dp"
+                tools:ignore="RtlSymmetry"
+                tools:layout_editor_absoluteX="19dp"
+                tools:layout_editor_absoluteY="26dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ToggleButton
+            android:id="@+id/toggleButtonVisibilityDK"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textInputLayout1"
+            android:layout_alignBottom="@+id/textInputLayout1"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:checked="false"
+            android:drawableStart="@drawable/ic_visibility_off"
+            android:drawablePadding="5dp"
+            android:rotationX="2"
+            android:textOff=""
+            android:textOn=""
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/line5"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/line4">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtRePasswordDK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:drawableStart="@drawable/ic_pen"
+                android:drawablePadding="5dp"
+                android:hint="@string/rePasswordTitle"
+                android:inputType="textPassword"
+                android:paddingEnd="50dp"
+                tools:ignore="RtlSymmetry" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ToggleButton
+            android:id="@+id/toggleButtonVisibilityRePasswordDK"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textInputLayout2"
+            android:layout_alignBottom="@+id/textInputLayout2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:checked="false"
+            android:drawableStart="@drawable/ic_visibility_off"
+            android:drawablePadding="5dp"
+            android:rotationX="2"
+            android:textOff=""
+            android:textOn=""
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
     <androidx.appcompat.widget.AppCompatButton
-        app:layout_constraintTop_toBottomOf="@+id/line3"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/line5"
         android:id="@+id/btnDangKy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,7 +183,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:text="@string/register"
-        android:background="@color/text_color"
+        android:background="@drawable/background_button"
 
         />
 
@@ -107,7 +205,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tvChuyenDangNhap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -115,4 +213,6 @@
             android:textColor="@android:color/holo_red_light"
             android:textStyle="bold" />
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

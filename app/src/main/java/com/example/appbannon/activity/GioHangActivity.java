@@ -89,12 +89,7 @@ public class GioHangActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         // Khi nhấn vào nút trở về thì trở về trang chủ
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
     private void setControl() {
         tvGioHangTrong = findViewById(R.id.tvGioHangTrong);

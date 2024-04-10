@@ -28,4 +28,6 @@
     <string name="register">Đăng ký</string>
     <string name="aldreadyAccountTitle">Đã có tài khoản</string>
     <string name="rePasswordTitle">Nhập lại mật khẩu</string>
+    <string name="mobileTitle">Số điện thoại</string>
+    <string name="usernameTitle">Họ và tên</string>
 </resources>
