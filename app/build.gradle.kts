@@ -36,10 +36,14 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1");
     implementation("com.google.android.material:material:1.11.0");
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation(fileTree(mapOf(
-        "dir" to "C:\\Users\\Administrator\\Documents\\zalopay",
-        "include" to listOf("*.aar", "*.jar")
-    )))
+    implementation(
+        fileTree(
+            mapOf(
+                "dir" to "C:\\Users\\Administrator\\Documents\\zalopay",
+                "include" to listOf("*.aar", "*.jar")
+            )
+        )
+    )
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     ;
     testImplementation("junit:junit:4.13.2");
@@ -71,4 +75,7 @@ dependencies {
     // zalopay
     implementation("com.squareup.okhttp3:okhttp:4.6.0");
     implementation("commons-codec:commons-codec:1.14");
+
+    // paper
+    implementation("io.github.pilgr:paperdb:2.7.2")
 }

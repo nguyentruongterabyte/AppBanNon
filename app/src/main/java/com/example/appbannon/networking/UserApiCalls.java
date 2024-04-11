@@ -1,5 +1,8 @@
 package com.example.appbannon.networking;
 
+
+import android.util.Log;
+
 import com.example.appbannon.model.User;
 
 import com.example.appbannon.model.UserModel;
@@ -20,9 +23,20 @@ public class UserApiCalls {
         compositeDisposable.add(apiBanHang.dangKy(user.getEmail(), user.getPassword(), user.getUsername(), user.getMobile())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        callback
-                )
+                .subscribe(callback, throwable -> {
+                    callback.accept(new UserModel(false, throwable.getMessage()));
+                })
+        );
+    }
+
+    // Đăng nhập
+    public static void login(String email, String password, Consumer<UserModel> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.dangNhap(email, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback, throwable -> {
+                    callback.accept(new UserModel(false, throwable.getMessage()));
+                })
         );
     }
 }

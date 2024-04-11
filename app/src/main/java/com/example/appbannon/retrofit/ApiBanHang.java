@@ -49,7 +49,7 @@ public interface ApiBanHang {
             @Field("gia") String gia,
             @Field("hinhAnh") String hinhAnh,
             @Field("soLuong") int soLuong
-            );
+    );
 
     @POST("cart-update-products.php")
     @FormUrlEncoded
@@ -93,6 +93,13 @@ public interface ApiBanHang {
             @Field("password") String password,
             @Field("username") String username,
             @Field("mobile") String mobile
+    );
+
+    @POST("user-login.php")
+    @FormUrlEncoded
+    Observable<UserModel> dangNhap(
+            @Field("email") String email,
+            @Field("password") String password
     );
 
 }

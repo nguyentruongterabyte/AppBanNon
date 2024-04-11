@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -15,16 +14,12 @@ import android.widget.ToggleButton;
 import com.example.appbannon.R;
 import com.example.appbannon.model.User;
 import com.example.appbannon.networking.UserApiCalls;
-import com.example.appbannon.retrofit.ApiBanHang;
-import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DangKyActivity extends AppCompatActivity {
 
@@ -35,7 +30,6 @@ public class DangKyActivity extends AppCompatActivity {
     AppCompatButton btnDangKy;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +44,21 @@ public class DangKyActivity extends AppCompatActivity {
             if (isChecked) {
                 // show password
                 edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                toggleButtonVisibilityPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility_on, 0, 0, 0);
+                toggleButtonVisibilityPassword.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_visibility_on,
+                        0,
+                        0,
+                        0);
             } else {
                 // Hide password
-                edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                toggleButtonVisibilityPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility_off, 0, 0, 0);
+                edtPassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                toggleButtonVisibilityPassword.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_visibility_off,
+                        0,
+                        0,
+                        0);
             }
 
         });
@@ -63,11 +67,21 @@ public class DangKyActivity extends AppCompatActivity {
             if (isChecked) {
                 // Show retype password
                 edtRePassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                toggleButtonVisibilityRePassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility_on, 0, 0, 0);
+                toggleButtonVisibilityRePassword.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_visibility_on,
+                        0,
+                        0,
+                        0);
             } else {
                 // Hide retype password
-                edtRePassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                toggleButtonVisibilityRePassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility_off, 0, 0, 0);
+                edtRePassword.setInputType(
+                        InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                toggleButtonVisibilityRePassword.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_visibility_off,
+                        0,
+                        0,
+                        0);
             }
         });
 
@@ -105,6 +119,15 @@ public class DangKyActivity extends AppCompatActivity {
                 UserApiCalls.register(user, userModel -> {
                     if (userModel.isSuccess()) {
                         Toast.makeText(this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
+                        // Lưu email vừa đăng ký thành công để chuyển sang màn hình đăng nhập
+                        // để người dùng khỏi nhập lại
+                        Utils.currentUser.setEmail(email);
+                        Utils.currentUser.setPassword(password);
+
+                        // Chuyển sang màn hình đăng kí nếu thành công
+                        Intent intent = new Intent(getApplicationContext(), DangNhapActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(this, userModel.getMessage(), Toast.LENGTH_SHORT).show();
                     }

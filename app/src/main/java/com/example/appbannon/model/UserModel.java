@@ -1,11 +1,16 @@
 package com.example.appbannon.model;
 
 public class UserModel {
-        private boolean success;
-        private String message;
-        private User result;
+    private boolean success;
+    private String message;
+    private User result;
 
     public UserModel() {
+    }
+
+    public UserModel(boolean success, String message) {
+        this.success = success;
+        this.message = message;
     }
 
     public boolean isSuccess() {
