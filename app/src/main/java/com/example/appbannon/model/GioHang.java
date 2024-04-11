@@ -6,12 +6,21 @@ import java.util.List;
 
 public class GioHang {
     private int maSanPham;
+    private int userId;
     private String tenSanPham;
     private String giaSanPham;
     private String hinhAnh;
     private int soLuong;
 
     public GioHang() {
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getMaSanPham() {

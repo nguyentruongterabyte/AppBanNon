@@ -38,13 +38,17 @@ public interface ApiBanHang {
     );
 
     // giỏ hàng
-    @GET("cart-list.php")
-    Observable<GioHangModel> getDanhSachSanPhamTrongGioHang();
+    @POST("cart-list.php")
+    @FormUrlEncoded
+    Observable<GioHangModel> getDanhSachSanPhamTrongGioHang(
+            @Field("userId") int userId
+    );
 
     @POST("cart-create.php")
     @FormUrlEncoded
     Observable<GioHangModel> themSanPhamVaoGioHang(
             @Field("maSanPham") int maSanPham,
+            @Field("userId") int userId,
             @Field("tenSanPham") String tenSanPham,
             @Field("gia") String gia,
             @Field("hinhAnh") String hinhAnh,
@@ -55,6 +59,7 @@ public interface ApiBanHang {
     @FormUrlEncoded
     Observable<GioHangModel> updateSanPhamTrongGioHang(
             @Field("maSanPham") int maSanPham,
+            @Field("userId") int userId,
             @Field("gia") String gia,
             @Field("soLuong") int soLuong
     );
@@ -62,7 +67,8 @@ public interface ApiBanHang {
     @POST("cart-delete-product.php")
     @FormUrlEncoded
     Observable<GioHangModel> xoaSanPhamKhoiGioHang(
-            @Field("maSanPham") int maSanPham
+            @Field("maSanPham") int maSanPham,
+            @Field("userId") int userId
     );
 
 
@@ -72,6 +78,7 @@ public interface ApiBanHang {
     Observable<DonHangModel> createDonHang(
             @Field("sdt") String sdt,
             @Field("email") String email,
+            @Field("userId") int userId,
             @Field("tongTien") String tongTien,
             @Field("diaChi") String diaChi,
             @Field("soLuong") int soLuong,

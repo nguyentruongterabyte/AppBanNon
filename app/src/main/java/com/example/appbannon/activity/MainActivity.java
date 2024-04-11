@@ -1,12 +1,5 @@
 package com.example.appbannon.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -22,6 +15,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.DanhMucAdapter;
@@ -31,8 +31,6 @@ import com.example.appbannon.model.SanPham;
 import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.networking.CategoryApiCalls;
 import com.example.appbannon.networking.ProductApiCalls;
-import com.example.appbannon.retrofit.ApiBanHang;
-import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -79,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-         // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
-        CartApiCalls.getAll(gioHangList -> {
+        // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
+        CartApiCalls.getAll(Utils.currentUser.getId(), gioHangList -> {
             Utils.mangGioHang = gioHangList;
             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
         }, compositeDisposable);

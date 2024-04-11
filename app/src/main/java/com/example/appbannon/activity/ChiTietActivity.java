@@ -1,8 +1,5 @@
 package com.example.appbannon.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,24 +10,21 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.model.GioHang;
 import com.example.appbannon.model.SanPham;
 import com.example.appbannon.networking.CartApiCalls;
-import com.example.appbannon.retrofit.ApiBanHang;
-import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ChiTietActivity extends AppCompatActivity {
 
@@ -120,6 +114,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuong;
                 // Lưu sản phẩm vào bảng giỏ hàng trong database
                 GioHang gioHang = new GioHang();
+                gioHang.setUserId(Utils.currentUser.getId());
                 gioHang.setMaSanPham(sanPham.getMaSanPham());
                 gioHang.setTenSanPham(sanPham.getTenSanPham());
                 gioHang.setSoLuong(soLuong);
@@ -144,6 +139,7 @@ public class ChiTietActivity extends AppCompatActivity {
             long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuong;
 
             GioHang gioHang = new GioHang();
+            gioHang.setUserId(Utils.currentUser.getId());
             gioHang.setMaSanPham(sanPham.getMaSanPham());
             gioHang.setTenSanPham(sanPham.getTenSanPham());
             gioHang.setSoLuong(soLuong);
@@ -160,7 +156,7 @@ public class ChiTietActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        sanPham = (SanPham) getIntent().getSerializableExtra("chiTietSanPham" );
+        sanPham = (SanPham) getIntent().getSerializableExtra("chiTietSanPham");
 //        assert sanPham != null;
         if (sanPham != null) {
             DecimalFormat dft = new DecimalFormat("###,###,###");
@@ -175,7 +171,7 @@ public class ChiTietActivity extends AppCompatActivity {
         ArrayAdapter<Integer> adapterSpinner = new ArrayAdapter<>(
                 this,
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+                new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
         spinnerSo.setAdapter(adapterSpinner);
     }
 

@@ -129,7 +129,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // gọi api xóa sản phẩm khỏi giỏ hàng
-                                CartApiCalls.delete(gioHangUpdate, isSuccess -> {
+                                CartApiCalls.delete(gioHangUpdate.getMaSanPham(), gioHangUpdate.getUserId(), isSuccess -> {
                                     if (isSuccess) {
                                         int index = GioHang.indexOf(Utils.mangMuaHang, Utils.mangGioHang.get(pos));
                                         if (index != -1) {
@@ -187,6 +187,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
 
         TextView itemGioHangGia, itemGioHangTenSP, itemGioHangSoLuong, itemGioHangGiaSP;
         CheckBox checkBox;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             itemGioHangImage = itemView.findViewById(R.id.itemGioHangImage);

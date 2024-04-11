@@ -1,27 +1,24 @@
 package com.example.appbannon.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.SanPhamAdapter;
 import com.example.appbannon.model.SanPham;
 import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.networking.ProductApiCalls;
-import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.utils.Utils;
 import com.nex3z.notificationbadge.NotificationBadge;
 
@@ -81,10 +78,10 @@ public class TimKiemSanPhamActivity extends AppCompatActivity {
 
     private void getDataSearch(String searchKey) {
         ProductApiCalls.search(searchKey, sanPhamList -> {
-                mangSanPham.clear();
-                mangSanPham = sanPhamList;
-                sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
-                recyclerViewDSSanPhamTimKiem.setAdapter(sanPhamAdapter);
+            mangSanPham.clear();
+            mangSanPham = sanPhamList;
+            sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
+            recyclerViewDSSanPhamTimKiem.setAdapter(sanPhamAdapter);
         }, compositeDisposable);
 
     }
@@ -139,7 +136,7 @@ public class TimKiemSanPhamActivity extends AppCompatActivity {
 
     private void initData() {
         // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
-        CartApiCalls.getAll(gioHangList -> {
+        CartApiCalls.getAll(Utils.currentUser.getId(), gioHangList -> {
             Utils.mangGioHang = gioHangList;
             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
         }, compositeDisposable);

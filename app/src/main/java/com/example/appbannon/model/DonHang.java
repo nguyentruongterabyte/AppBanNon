@@ -5,12 +5,21 @@ public class DonHang {
     private String maDonHang;
     private String sdt;
     private String email;
+    private int userId;
     private String tongTien;
     private String diaChi;
     private int soLuong;
     private String chiTiet;
 
     public DonHang() {
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getMaDonHang() {

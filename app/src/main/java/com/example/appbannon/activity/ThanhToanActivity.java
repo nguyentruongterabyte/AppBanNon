@@ -1,9 +1,5 @@
 package com.example.appbannon.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -13,10 +9,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.appbannon.R;
 import com.example.appbannon.model.CreateOrder;
 import com.example.appbannon.model.DonHang;
-import com.example.appbannon.model.EventBus.TinhTongEvent;
 import com.example.appbannon.model.GioHang;
 import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.networking.OrderApiCalls;
@@ -24,11 +23,9 @@ import com.example.appbannon.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -60,9 +57,15 @@ public class ThanhToanActivity extends AppCompatActivity {
         // ZaloPay SDK Init
         ZaloPaySDK.init(2554, Environment.SANDBOX);
         setControl();
+        initData();
         ActionToolBar();
         countItem();
         setEvent();
+    }
+
+    private void initData() {
+        tvEmail.setText(Utils.currentUser.getEmail());
+        tvSDT.setText(Utils.currentUser.getMobile());
     }
 
     private void countItem() {
@@ -77,7 +80,7 @@ public class ThanhToanActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                
+
                 String diaChi = Objects.requireNonNull(edtDiaChi.getText()).toString().trim();
                 if (TextUtils.isEmpty(diaChi)) {
                     Toast.makeText(ThanhToanActivity.this, "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
@@ -86,6 +89,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                     DonHang donHang = new DonHang();
                     donHang.setEmail(tvEmail.getText().toString());
                     donHang.setSdt(tvSDT.getText().toString());
+                    donHang.setUserId(Utils.currentUser.getId());
                     donHang.setTongTien(String.valueOf(tongTien));
                     donHang.setDiaChi(edtDiaChi.getText().toString());
                     donHang.setSoLuong(totalItem);
@@ -98,8 +102,8 @@ public class ThanhToanActivity extends AppCompatActivity {
 
                             for (GioHang gh : Utils.mangMuaHang) {
                                 // xóa sản phẩm đã mua trong database
-                                CartApiCalls.delete(gh, ok -> {
-                                    CartApiCalls.getAll(mangGioHang -> {
+                                CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> {
+                                    CartApiCalls.getAll(Utils.currentUser.getId(), mangGioHang -> {
                                         // cập nhật mảng giỏ hàng
                                         Utils.mangGioHang = mangGioHang;
                                     }, compositeDisposable);
@@ -127,6 +131,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                     Toast.makeText(ThanhToanActivity.this, "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
                 } else {
                     donHang = new DonHang();
+                    donHang.setUserId(Utils.currentUser.getId());
                     donHang.setEmail(tvEmail.getText().toString());
                     donHang.setSdt(tvSDT.getText().toString());
                     donHang.setTongTien(String.valueOf(tongTien));
@@ -163,7 +168,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                                 // xóa giỏ hàng trên database
                                 for (GioHang gh : Utils.mangMuaHang) {
                                     // xóa sản phẩm đã mua trong database
-                                    CartApiCalls.delete(gh, ok -> {
+                                    CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> {
                                         for (int i = 0; i < Utils.mangGioHang.size(); i++) {
                                             if (Utils.mangGioHang.get(i).getMaSanPham() == gh.getMaSanPham()) {
                                                 Utils.mangGioHang.remove(i);
@@ -187,8 +192,6 @@ public class ThanhToanActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         }, compositeDisposable);
-
-
 
 
                     }

@@ -1,13 +1,9 @@
 package com.example.appbannon.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -86,7 +82,7 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
 
     private void initData() {
         // get danh sách giỏ hàng từ database về lưu vào mảng mangGioHang
-        CartApiCalls.getAll(gioHangList -> {
+        CartApiCalls.getAll(Utils.currentUser.getId(), gioHangList -> {
             Utils.mangGioHang = gioHangList;
             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
         }, compositeDisposable);

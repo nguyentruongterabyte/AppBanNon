@@ -1,6 +1,7 @@
 package com.example.appbannon.model;
 
 public class User {
+    private int id;
     private String email;
     private String password;
     private String username;
@@ -14,6 +15,14 @@ public class User {
         this.password = password;
         this.username = username;
         this.mobile = mobile;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmail() {

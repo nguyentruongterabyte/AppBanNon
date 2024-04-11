@@ -17,17 +17,14 @@ public class CartApiCalls {
     private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
 
     // call api lấy danh sách giỏ hàng
-    public static void getAll(Consumer<List<GioHang>> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPhamTrongGioHang()
+    public static void getAll(int userId, Consumer<List<GioHang>> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.getDanhSachSanPhamTrongGioHang(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         gioHangModel -> {
                             if (gioHangModel.isSuccess()) {
-                               callback.accept(gioHangModel.getResult());
-                               for (int i = 0; i < gioHangModel.getResult().size(); i++) {
-                                   System.out.println("san pham " + i + ": " +  gioHangModel.getResult().get(i).toString());
-                               }
+                                callback.accept(gioHangModel.getResult());
                             } else {
                                 callback.accept(new ArrayList<>());
                             }
@@ -36,10 +33,12 @@ public class CartApiCalls {
                         }
                 ));
     }
+
     // call api thêm sản phẩm vào giỏ hàng
     public static void add(GioHang gioHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.themSanPhamVaoGioHang(
                                 gioHang.getMaSanPham(),
+                                gioHang.getUserId(),
                                 gioHang.getTenSanPham(),
                                 gioHang.getGiaSanPham(),
                                 gioHang.getHinhAnh(),
@@ -61,6 +60,7 @@ public class CartApiCalls {
     public static void update(GioHang gioHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.updateSanPhamTrongGioHang(
                         gioHang.getMaSanPham(),
+                        gioHang.getUserId(),
                         gioHang.getGiaSanPham(),
                         gioHang.getSoLuong())
                 .subscribeOn(Schedulers.io())
@@ -76,9 +76,8 @@ public class CartApiCalls {
     }
 
     // call api xóa sản phẩm khỏi giỏ hàng
-    public static void delete(GioHang gioHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.xoaSanPhamKhoiGioHang(
-                gioHang.getMaSanPham())
+    public static void delete(int maSanPham, int userId, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.xoaSanPhamKhoiGioHang(maSanPham, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
