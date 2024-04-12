@@ -30,4 +30,6 @@
     <string name="rePasswordTitle">Nhập lại mật khẩu</string>
     <string name="mobileTitle">Số điện thoại</string>
     <string name="usernameTitle">Họ và tên</string>
+    <string name="appName">App bán nón</string>
+    <string name="defaultQuantity">1</string>
 </resources>

@@ -11,6 +11,7 @@ public class GioHang {
     private String giaSanPham;
     private String hinhAnh;
     private int soLuong;
+    private int soLuongToiDa;
 
     public GioHang() {
     }
@@ -61,6 +62,14 @@ public class GioHang {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+
+    public int getSoLuongToiDa() {
+        return soLuongToiDa;
+    }
+
+    public void setSoLuongToiDa(int soLuongToiDa) {
+        this.soLuongToiDa = soLuongToiDa;
     }
 
     public static int indexOf(List<GioHang> mangGioHang, GioHang gioHang) {

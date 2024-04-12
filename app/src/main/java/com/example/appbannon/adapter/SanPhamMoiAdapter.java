@@ -47,15 +47,12 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
         holder.tvGia.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
         Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
 
-        holder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onClick(View view, int pos, boolean isLongClick) {
-                if (!isLongClick) {
-                    Intent intent = new Intent(context, ChiTietActivity.class);
-                    intent.putExtra("chiTietSanPham", sanPham);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
+        holder.setItemClickListener((view, pos, isLongClick) -> {
+            if (!isLongClick) {
+                Intent intent = new Intent(context, ChiTietActivity.class);
+                intent.putExtra("chiTietSanPham", sanPham);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
 
@@ -72,6 +69,7 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
         TextView tvGia, tvTen;
         ImageView image;
         private ItemClickListener itemClickListener;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvGia = itemView.findViewById(R.id.item_gia_san_pham_moi);

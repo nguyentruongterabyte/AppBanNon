@@ -110,33 +110,27 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadMore() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                // add null vào mảng để hàm getItemViewType xác định được
-                // user kéo đến phần tử cuối cùng
-                mangSanPham.add(null);
-                sanPhamAdapter.notifyItemInserted(mangSanPham.size() - 1);
-            }
+        handler.post(() -> {
+            // add null vào mảng để hàm getItemViewType xác định được
+            // user kéo đến phần tử cuối cùng
+            mangSanPham.add(null);
+            sanPhamAdapter.notifyItemInserted(mangSanPham.size() - 1);
         });
-        handler.postDelayed(new Runnable() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void run() {
-                // remove null
-                for (int i = mangSanPham.size() - 1; i >= 0; i--) {
-                    if (mangSanPham.get(i) == null) {
-                        mangSanPham.remove(i);
-                        break;
-                    }
+        handler.postDelayed(() -> {
+            // remove null
+            for (int i = mangSanPham.size() - 1; i >= 0; i--) {
+                if (mangSanPham.get(i) == null) {
+                    mangSanPham.remove(i);
+                    break;
                 }
-                sanPhamAdapter.notifyItemRemoved(mangSanPham.size());
-                page += 1;
-                getDanhSachSanPham(page);
-                sanPhamAdapter.notifyDataSetChanged();
-                isLoading = false;
             }
+            sanPhamAdapter.notifyItemRemoved(mangSanPham.size());
+            page += 1;
+            getDanhSachSanPham(page);
+            sanPhamAdapter.notifyDataSetChanged();
+            isLoading = false;
         }, 1000);
     }
 

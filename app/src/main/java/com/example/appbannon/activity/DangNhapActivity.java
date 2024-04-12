@@ -1,16 +1,16 @@
 package com.example.appbannon.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.appbannon.R;
 import com.example.appbannon.networking.UserApiCalls;
@@ -28,6 +28,8 @@ public class DangNhapActivity extends AppCompatActivity {
     TextView tvChuyenDangKy;
     AppCompatButton btnDangNhap;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,38 +67,45 @@ public class DangNhapActivity extends AppCompatActivity {
         });
 
         // Xử lý sự kiện khi button đăng nhập được nhấn
-        btnDangNhap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = Objects.requireNonNull(edtEmail.getText()).toString().trim();
-                String password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
+        btnDangNhap.setOnClickListener(v -> {
+            String email = Objects.requireNonNull(edtEmail.getText()).toString().trim();
+            String password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(DangNhapActivity.this, "Bạn chưa nhập email", Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(DangNhapActivity.this, "Bạn chưa nhập mật khẩu", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Lưu email và mật khẩu cho lần đăng nhập sau
-                    Paper.book().write("email", email);
-                    Paper.book().write("password", password);
+            if (TextUtils.isEmpty(email)) {
+                Toast.makeText(DangNhapActivity.this, "Bạn chưa nhập email", Toast.LENGTH_SHORT).show();
+            } else if (TextUtils.isEmpty(password)) {
+                Toast.makeText(DangNhapActivity.this, "Bạn chưa nhập mật khẩu", Toast.LENGTH_SHORT).show();
+            } else {
+                // Lưu email và mật khẩu cho lần đăng nhập sau
+                Paper.book().write("email", email);
+                Paper.book().write("password", password);
 
-                    //post data
-                    UserApiCalls.login(email, password, userModel -> {
-                        if (userModel.isSuccess()) {
-                            Utils.currentUser = userModel.getResult();
-                            // Nếu đăng nhập thành công, chuyển về màn hình trang chủ
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // Thông báo lỗi nếu email hoặc mật khẩu không đúng
-                            Toast.makeText(DangNhapActivity.this, userModel.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }, compositeDisposable);
+                //post data
+                dangNhap(email, password);
 
-                }
             }
         });
+    }
+
+    public void dangNhap(String email, String password) {
+        UserApiCalls.login(email, password, userModel -> {
+            if (userModel.isSuccess()) {
+
+                isLogin = true;
+                // Lưu thông tin người dùng
+                Paper.book().write("isLogin", isLogin);
+                Utils.currentUser = userModel.getResult();
+                Paper.book().write("user", userModel.getResult());
+
+                // Nếu đăng nhập thành công, chuyển về màn hình trang chủ
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                // Thông báo lỗi nếu email hoặc mật khẩu không đúng
+                Toast.makeText(DangNhapActivity.this, userModel.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }, compositeDisposable);
     }
 
     private void setControl() {
@@ -112,10 +121,20 @@ public class DangNhapActivity extends AppCompatActivity {
 
         btnDangNhap = findViewById(R.id.btnDangNhap);
 
+
         // đọc dữ liệu của email và password những lần đăng nhập trước đó
         if (Paper.book().read("email") != null && Paper.book().read("password") != null) {
             edtEmail.setText(Paper.book().read("email"));
             edtPassword.setText(Paper.book().read("password"));
+            if (Paper.book().read("isLogin") != null) {
+                boolean flag = Boolean.TRUE.equals(Paper.book().read("isLogin"));
+                if (flag) {
+                    new Handler().postDelayed(() -> dangNhap(
+                            Paper.book().read("email"),
+                            Paper.book().read("password")
+                    ), 1000);
+                }
+            }
         }
     }
 

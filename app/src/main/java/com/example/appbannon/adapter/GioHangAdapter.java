@@ -2,12 +2,10 @@ package com.example.appbannon.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +48,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         return new MyViewHolder(view);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull GioHangAdapter.MyViewHolder holder, int position) {
         GioHang gioHang = gioHangList.get(position);
@@ -66,110 +65,97 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
 
         holder.checkBox.setChecked(GioHang.indexOf(Utils.mangMuaHang, gioHang) != -1);
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Utils.mangMuaHang.add(gioHang);
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Utils.mangMuaHang.add(gioHang);
+                EventBus.getDefault().postSticky(new TinhTongEvent());
+            } else {
+                int index = GioHang.indexOf(Utils.mangMuaHang, gioHang);
+                if (index != -1) {
+                    Utils.mangMuaHang.remove(index);
                     EventBus.getDefault().postSticky(new TinhTongEvent());
-                } else {
-                    int index = GioHang.indexOf(Utils.mangMuaHang, gioHang);
-                    if (index != -1) {
-                        Utils.mangMuaHang.remove(index);
-                        EventBus.getDefault().postSticky(new TinhTongEvent());
-                    }
                 }
             }
         });
-        holder.setListener(new ImageClickListener() {
-            @Override
-            public void onImageClick(View view, int pos, int giaTri) {
-                GioHang gioHangUpdate = gioHangList.get(pos);
-                if (giaTri == 1) {
-                    // khi giá trị bằng 1 có nghĩa là người dùng nhấn vào nút giảm
-                    if (gioHangUpdate.getSoLuong() > 1) {
-                        // số lượng mới bằng số lượng cũ trừ đi 1
-                        int soLuongMoi = gioHangUpdate.getSoLuong() - 1;
+        holder.setListener((view, pos, giaTri) -> {
+            GioHang gioHangUpdate = gioHangList.get(pos);
+            if (giaTri == 1) {
+                // khi giá trị bằng 1 có nghĩa là người dùng nhấn vào nút giảm
+                if (gioHangUpdate.getSoLuong() > 1) {
+                    // số lượng mới bằng số lượng cũ trừ đi 1
+                    int soLuongMoi = gioHangUpdate.getSoLuong() - 1;
 
-                        // lấy giá cũ lưu vào biến giaCu
-                        long giaCu = Long.parseLong(gioHangUpdate.getGiaSanPham());
+                    // lấy giá cũ lưu vào biến giaCu
+                    long giaCu = Long.parseLong(gioHangUpdate.getGiaSanPham());
 
-                        // giá mới = giá thành tiền cũ / số lượng cũ * số lượng mới
-                        long giaMoi = giaCu / gioHangUpdate.getSoLuong() * soLuongMoi;
+                    // giá mới = giá thành tiền cũ / số lượng cũ * số lượng mới
+                    long giaMoi = giaCu / gioHangUpdate.getSoLuong() * soLuongMoi;
 
-                        // update số lượng mới và giá thành tiền mới
-                        gioHangUpdate.setSoLuong(soLuongMoi);
-                        gioHangUpdate.setGiaSanPham(String.valueOf(giaMoi));
+                    // update số lượng mới và giá thành tiền mới
+                    gioHangUpdate.setSoLuong(soLuongMoi);
+                    gioHangUpdate.setGiaSanPham(String.valueOf(giaMoi));
 
-                        // Gọi api
-                        CartApiCalls.update(gioHangUpdate, isSuccess -> {
+                    // Gọi api update số lượng sản phẩm trong giỏ hàng
+                    CartApiCalls.update(gioHangUpdate, isSuccess -> {
+                        if (isSuccess) {
+                            // Nếu update thành công ở database thì
+                            // mới thực hiện update ở mảng toàn cục
+                            gioHangList.get(pos).setSoLuong(soLuongMoi);
+                            holder.itemGioHangSoLuong.setText(String.valueOf(soLuongMoi));
+                            holder.itemGioHangGiaSP.setText(String.format("Giá: %s", dft.format(giaMoi)));
+                            // Gọi hàm tính tổng tiền bằng event bus bên GioHangActivity
+                            EventBus.getDefault().postSticky(new TinhTongEvent());
+
+                        }
+                    }, compositeDisposable);
+                } else if (gioHangUpdate.getSoLuong() == 1) {
+                    // Khi số lượng về 1 nhưng người dùng vẫn nhấn tiếp
+                    // dấu trừ thì thực hiện hỏi người dùng có muốn
+                    // xóa sản phẩm khỏi giỏ hàng hay không
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
+                    builder.setTitle("Thông báo");
+                    builder.setMessage("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng?");
+
+                    // Nếu người dùng nhấn đồng ý thì thực hiện xóa sản phẩm ra khỏi
+                    // giỏ hàng
+                    builder.setPositiveButton("Đồng ý", (dialog, which) -> {
+                        // gọi api xóa sản phẩm khỏi giỏ hàng
+                        CartApiCalls.delete(gioHangUpdate.getMaSanPham(), gioHangUpdate.getUserId(), isSuccess -> {
                             if (isSuccess) {
-                                // Nếu update thành công ở database thì
-                                // mới thực hiện update ở mảng toàn cục
-                                gioHangList.get(pos).setSoLuong(soLuongMoi);
-                                holder.itemGioHangSoLuong.setText(String.valueOf(soLuongMoi));
-                                holder.itemGioHangGiaSP.setText(String.format("Giá: %s", dft.format(giaMoi)));
-                                // Gọi hàm tính tổng tiền bằng event bus bên GioHangActivity
-                                EventBus.getDefault().postSticky(new TinhTongEvent());
-
-                            }
-                        }, compositeDisposable);
-                    } else if (gioHangUpdate.getSoLuong() == 1) {
-                        // Khi số lượng về 1 nhưng người dùng vẫn nhấn tiếp
-                        // dấu trừ thì thực hiện hỏi người dùng có muốn
-                        // xóa sản phẩm khỏi giỏ hàng hay không
-                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
-                        builder.setTitle("Thông báo");
-                        builder.setMessage("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng?");
-
-                        // Nếu người dùng nhấn đồng ý thì thực hiện xóa sản phẩm ra khỏi
-                        // giỏ hàng
-                        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-                            @SuppressLint("NotifyDataSetChanged")
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // gọi api xóa sản phẩm khỏi giỏ hàng
-                                CartApiCalls.delete(gioHangUpdate.getMaSanPham(), gioHangUpdate.getUserId(), isSuccess -> {
-                                    if (isSuccess) {
-                                        int index = GioHang.indexOf(Utils.mangMuaHang, Utils.mangGioHang.get(pos));
-                                        if (index != -1) {
-                                            Utils.mangMuaHang.remove(index);
-                                        }
-                                        Utils.mangGioHang.remove(pos);
-                                        notifyDataSetChanged();
-                                        EventBus.getDefault().postSticky(new TinhTongEvent());
-                                    }
-                                }, compositeDisposable);
-                            }
-                        });
-
-                        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.show();
-
-                    }
-                } else if (giaTri == 2) {
-                    if (gioHangUpdate.getSoLuong() < 11) {
-                        int soLuongMoi = gioHangUpdate.getSoLuong() + 1;
-                        long giaCu = Long.parseLong(gioHangUpdate.getGiaSanPham());
-                        long giaMoi = giaCu / gioHangUpdate.getSoLuong() * soLuongMoi;
-                        gioHangUpdate.setSoLuong(soLuongMoi);
-                        gioHangUpdate.setGiaSanPham(String.valueOf(giaMoi));
-                        // gọi api update sản phẩm
-                        CartApiCalls.update(gioHangUpdate, isSuccess -> {
-                            if (isSuccess) {
-                                gioHangList.get(pos).setSoLuong(soLuongMoi);
-                                holder.itemGioHangSoLuong.setText(String.valueOf(soLuongMoi));
-                                holder.itemGioHangGiaSP.setText(String.format("Giá: %s", dft.format(giaMoi)));
-
+                                int index = GioHang.indexOf(Utils.mangMuaHang, Utils.mangGioHang.get(pos));
+                                if (index != -1) {
+                                    Utils.mangMuaHang.remove(index);
+                                }
+                                Utils.mangGioHang.remove(pos);
+                                notifyDataSetChanged();
                                 EventBus.getDefault().postSticky(new TinhTongEvent());
                             }
                         }, compositeDisposable);
-                    }
+                    });
+
+                    builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+                    builder.show();
+
+                }
+            } else if (giaTri == 2) {
+                // khi giá trị bằng 2 có nghĩa là người dùng nhấn vào nút tăng
+
+                if (gioHangUpdate.getSoLuong() < gioHang.getSoLuongToiDa()) {
+                    int soLuongMoi = gioHangUpdate.getSoLuong() + 1;
+                    long giaCu = Long.parseLong(gioHangUpdate.getGiaSanPham());
+                    long giaMoi = giaCu / gioHangUpdate.getSoLuong() * soLuongMoi;
+                    gioHangUpdate.setSoLuong(soLuongMoi);
+                    gioHangUpdate.setGiaSanPham(String.valueOf(giaMoi));
+                    // gọi api update sản phẩm
+                    CartApiCalls.update(gioHangUpdate, isSuccess -> {
+                        if (isSuccess) {
+                            gioHangList.get(pos).setSoLuong(soLuongMoi);
+                            holder.itemGioHangSoLuong.setText(String.valueOf(soLuongMoi));
+                            holder.itemGioHangGiaSP.setText(String.format("Giá: %s", dft.format(giaMoi)));
+
+                            EventBus.getDefault().postSticky(new TinhTongEvent());
+                        }
+                    }, compositeDisposable);
                 }
             }
         });

@@ -2,12 +2,9 @@ package com.example.appbannon.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,15 +25,16 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ChiTietActivity extends AppCompatActivity {
 
-    TextView tvTenSanPham, tvGiaSanPham, tvMoTaChiTiet;
+    TextView tvTenSanPham, tvGiaSanPham, tvMoTaChiTiet, tvSoLuong;
     Button btnThemVaoGioHang;
     ImageView imageChiTiet;
-    Spinner spinnerSo;
     NotificationBadge badgeGioHang;
     FrameLayout frameLayoutGioHang;
     Toolbar toolbar;
     SanPham sanPham;
+    ImageView imageChiTietTru, imageChiTietCong;
 
+    int soLuongSPTrongGioHang = 0;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -48,22 +46,40 @@ public class ChiTietActivity extends AppCompatActivity {
         ActionToolBar();
         initData();
         setEvent();
+
     }
 
     private void setEvent() {
-        btnThemVaoGioHang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                themVaoGioHang();
+
+        // Xử lý khi nhấn vào nút trừ
+        imageChiTietTru.setOnClickListener(v -> {
+            int soLuong = Integer.parseInt(tvSoLuong.getText().toString());
+            if (soLuong > 1) {
+                // set lại số lượng = số lượng -1
+                tvSoLuong.setText(String.valueOf(soLuong - 1));
             }
         });
 
-        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
-                startActivity(gioHang);
+        // Xử lý khi nhấn vào nút cộng
+        imageChiTietCong.setOnClickListener(v -> {
+
+            // Lấy số lượng từ text view số lượng
+            int soLuong = Integer.parseInt(tvSoLuong.getText().toString());
+
+            // nếu số lượng nhỏ hơn số lượng tối đa - số lượng sản phẩm trong giỏ hàng
+            if (soLuong < sanPham.getSoLuong() - soLuongSPTrongGioHang) {
+                // set lại số lượng = số lượng +1
+                tvSoLuong.setText(String.valueOf(soLuong + 1));
             }
+        });
+
+        // Xử lý sự kiện nút thêm vào giỏ hàng được nhấn
+        btnThemVaoGioHang.setOnClickListener(v -> themVaoGioHang());
+
+        // Xử lý sự kiện nhấn vào biểu tượng giỏ hàng
+        frameLayoutGioHang.setOnClickListener(v -> {
+            Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+            startActivity(gioHang);
         });
     }
 
@@ -77,7 +93,7 @@ public class ChiTietActivity extends AppCompatActivity {
             // flag = false: không tồn tại
             // flag = true: tồn tại
             boolean flag = false;
-            int soLuong = Integer.parseInt(spinnerSo.getSelectedItem().toString());
+            int soLuong = Integer.parseInt(tvSoLuong.getText().toString());
             // Lặp qua mảng giỏ hàng xem có sản phẩm nào trùng mã sản phẩm
             // thêm vào giỏ hàng không
             for (int i = 0; i < Utils.mangGioHang.size(); i++) {
@@ -97,6 +113,8 @@ public class ChiTietActivity extends AppCompatActivity {
                     CartApiCalls.update(Utils.mangGioHang.get(i), isSuccess -> {
                         if (isSuccess) {
                             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+                            // cập nhật lại textView số lượng = số lượng sản phẩm tối đa - (số lượng sản phẩm trong giỏ hàng + soLuong)
+                            tvSoLuong.setText(String.valueOf(sanPham.getSoLuong() - (soLuongSPTrongGioHang + soLuong) > 0 ? 1 : 0));
                         } else {
                             int index = GioHang.indexOf(Utils.mangGioHang, gioHangCu);
                             if (index != -1) {
@@ -120,6 +138,7 @@ public class ChiTietActivity extends AppCompatActivity {
                 gioHang.setSoLuong(soLuong);
                 gioHang.setHinhAnh(sanPham.getHinhAnh());
                 gioHang.setGiaSanPham(String.valueOf(gia));
+                gioHang.setSoLuongToiDa(sanPham.getSoLuong());
 
 
                 // Thêm sản phẩm vào giỏ hàng trong database
@@ -127,14 +146,16 @@ public class ChiTietActivity extends AppCompatActivity {
                     if (isSuccess) {
                         Utils.mangGioHang.add(gioHang);
                         badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+                        // cập nhật lại textView số lượng = số lượng sản phẩm tối đa - (số lượng sản phẩm trong giỏ hàng + soLuong)
+                        tvSoLuong.setText(String.valueOf(sanPham.getSoLuong() - (soLuongSPTrongGioHang + soLuong) > 0 ? 1 : 0));
                     }
                 }, compositeDisposable);
 
 
             }
         } else {
-            // Lấy số lượng từ spinner số lượng
-            int soLuong = Integer.parseInt(spinnerSo.getSelectedItem().toString());
+            // Lấy số lượng từ textView số lượng
+            int soLuong = Integer.parseInt(tvSoLuong.getText().toString());
             // giá = giá sản phẩm * số lượng
             long gia = Long.parseLong(sanPham.getGiaSanPham()) * soLuong;
 
@@ -145,19 +166,21 @@ public class ChiTietActivity extends AppCompatActivity {
             gioHang.setSoLuong(soLuong);
             gioHang.setHinhAnh(sanPham.getHinhAnh());
             gioHang.setGiaSanPham(String.valueOf(gia));
+            gioHang.setSoLuongToiDa(sanPham.getSoLuong());
 
             // Thêm sản phẩm vào giỏ hàng trong database
             CartApiCalls.add(gioHang, isSuccess -> {
                 Utils.mangGioHang.add(gioHang);
                 badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+
+                // cập nhật lại textView số lượng = số lượng sản phẩm tối đa - (số lượng sản phẩm trong giỏ hàng + soLuong)
+                tvSoLuong.setText(String.valueOf(sanPham.getSoLuong() - (soLuongSPTrongGioHang + soLuong) > 0 ? 1 : 0));
             }, compositeDisposable);
         }
-
     }
 
     private void initData() {
         sanPham = (SanPham) getIntent().getSerializableExtra("chiTietSanPham");
-//        assert sanPham != null;
         if (sanPham != null) {
             DecimalFormat dft = new DecimalFormat("###,###,###");
             tvTenSanPham.setText(sanPham.getTenSanPham());
@@ -168,11 +191,23 @@ public class ChiTietActivity extends AppCompatActivity {
             tvMoTaChiTiet.setText(moTa);
             Glide.with(getApplicationContext()).load(sanPham.getHinhAnh()).into(imageChiTiet);
         }
-        ArrayAdapter<Integer> adapterSpinner = new ArrayAdapter<>(
-                this,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-        spinnerSo.setAdapter(adapterSpinner);
+
+        // Nếu sản phẩm đã được thêm vào giỏ hàng trước đó
+        // thì lấy số lượng đó ra để so sánh
+        // với số lượng người dùng nhấn thêm
+        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
+            GioHang gioHang = Utils.mangGioHang.get(i);
+            if (gioHang.getMaSanPham() == sanPham.getMaSanPham()) {
+                soLuongSPTrongGioHang = gioHang.getSoLuong();
+            }
+        }
+
+        // Set số lượng để thêm vào giỏ hàng = 0 nếu số lượng sản phẩm
+        // trong giỏ hàng đạt giơi hạn số lượng sản phẩm trong db
+        // = 1 trong trường hợp còn lại
+        assert sanPham != null;
+        tvSoLuong.setText(String.valueOf(soLuongSPTrongGioHang != sanPham.getSoLuong() ? 1 : 0));
+
     }
 
     private void setControl() {
@@ -183,14 +218,17 @@ public class ChiTietActivity extends AppCompatActivity {
         btnThemVaoGioHang = findViewById(R.id.btnThemVaoGioHang);
 
         imageChiTiet = findViewById(R.id.imageChiTiet);
+        imageChiTietTru = findViewById(R.id.imageChiTietTru);
+        imageChiTietCong = findViewById(R.id.imageChiTietCong);
 
-        spinnerSo = findViewById(R.id.spinnerSo);
+        tvSoLuong = findViewById(R.id.tvSoLuong);
 
         toolbar = findViewById(R.id.toolbar);
 
         badgeGioHang = findViewById(R.id.menu_sl);
 
         frameLayoutGioHang = findViewById(R.id.frameGioHang);
+
 
         if (Utils.mangGioHang != null) {
             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
@@ -200,12 +238,7 @@ public class ChiTietActivity extends AppCompatActivity {
     private void ActionToolBar() {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     @Override
@@ -218,5 +251,21 @@ public class ChiTietActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
+
+        // Nếu sản phẩm đã được thêm vào giỏ hàng trước đó
+        // thì lấy số lượng đó ra để so sánh
+        // với số lượng người dùng nhấn thêm
+        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
+            GioHang gioHang = Utils.mangGioHang.get(i);
+            if (gioHang.getMaSanPham() == sanPham.getMaSanPham()) {
+                soLuongSPTrongGioHang = gioHang.getSoLuong();
+            }
+        }
+
+        // Set số lượng để thêm vào giỏ hàng = 0 nếu số lượng sản phẩm
+        // trong giỏ hàng đạt giơi hạn số lượng sản phẩm trong db
+        // = 1 trong trường hợp còn lại
+        assert sanPham != null;
+        tvSoLuong.setText(String.valueOf(soLuongSPTrongGioHang != sanPham.getSoLuong() ? 1 : 0));
     }
 }

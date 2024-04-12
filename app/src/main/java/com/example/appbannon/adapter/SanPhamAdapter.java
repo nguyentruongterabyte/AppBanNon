@@ -57,20 +57,16 @@ public class SanPhamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             myViewHolder.tvGia.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
             Glide.with(context).load(sanPham.getHinhAnh()).into(myViewHolder.image);
 
-            myViewHolder.setItemClickListener(new ItemClickListener() {
-                @Override
-                public void onClick(View view, int pos, boolean isLongClick) {
-                    if (!isLongClick) {
-                        // click vào item
-                        Intent intent = new Intent(context, ChiTietActivity.class);
-                        intent.putExtra("chiTietSanPham", sanPham);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }
+            myViewHolder.setItemClickListener((view, pos, isLongClick) -> {
+                if (!isLongClick) {
+                    // click vào item
+                    Intent intent = new Intent(context, ChiTietActivity.class);
+                    intent.putExtra("chiTietSanPham", sanPham);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
             });
-        }
-        else {
+        } else {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
         }

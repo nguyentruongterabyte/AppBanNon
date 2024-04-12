@@ -1,5 +1,6 @@
 package com.example.appbannon.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,14 +40,10 @@ public class DanhMucAdapter extends BaseAdapter {
         return 0;
     }
 
-    public class ViewHolder {
-        TextView textTenDanhMuc;
-        ImageView ivHinhAnh;
-    }
-
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if (view == null) {
             viewHolder = new ViewHolder();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -62,5 +59,10 @@ public class DanhMucAdapter extends BaseAdapter {
         viewHolder.textTenDanhMuc.setText(array.get(i).getTenDanhMuc());
         Glide.with(context).load(array.get(i).getHinhAnh()).into(viewHolder.ivHinhAnh);
         return view;
+    }
+
+    public static class ViewHolder {
+        TextView textTenDanhMuc;
+        ImageView ivHinhAnh;
     }
 }

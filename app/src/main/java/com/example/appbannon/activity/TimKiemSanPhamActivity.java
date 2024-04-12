@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -87,12 +86,9 @@ public class TimKiemSanPhamActivity extends AppCompatActivity {
     }
 
     private void setEventClick() {
-        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
-                startActivity(gioHang);
-            }
+        frameLayoutGioHang.setOnClickListener(v -> {
+            Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+            startActivity(gioHang);
         });
     }
 
@@ -114,12 +110,7 @@ public class TimKiemSanPhamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         // Khi nhấn vào nút trở về thì trở về trang chủ
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     @Override

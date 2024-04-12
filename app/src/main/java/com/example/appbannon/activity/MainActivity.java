@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -39,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.paperdb.Paper;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Paper.init(this);
+        if (Paper.book().read("user") != null) {
+            // Lấy thông tin user đã lưu trữ từ paper
+            Utils.currentUser = Paper.book().read("user");
+        }
 
         setControl();
         ActionBar();
@@ -85,27 +89,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getEventClick() {
-        listViewManHinhChinh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        Intent trangChu = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(trangChu);
-                        break;
-                    case 1:
-                        Intent danhSachSanPham = new Intent(getApplicationContext(), DanhSachSanPhamActivity.class);
-                        startActivity(danhSachSanPham);
-                        break;
-                }
+        listViewManHinhChinh.setOnItemClickListener((parent, view, position, id) -> {
+            switch (position) {
+                case 0:
+                    // start activity trang chủ
+                    Intent trangChu = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(trangChu);
+                    break;
+                case 1:
+                    // start activity danh sách sản phẩm
+                    Intent danhSachSanPham = new Intent(getApplicationContext(), DanhSachSanPhamActivity.class);
+                    startActivity(danhSachSanPham);
+                    break;
+                case 2:
+                    // xóa key user
+                    Paper.book().delete("user");
+                    Paper.book().delete("isLogin");
+                    Intent dangNhap = new Intent(getApplicationContext(), DangNhapActivity.class);
+                    startActivity(dangNhap);
+                    finish();
+                    break;
             }
         });
-        frameLayoutGioHang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
-                startActivity(gioHang);
-            }
+        frameLayoutGioHang.setOnClickListener(v -> {
+            Intent gioHang = new Intent(getApplicationContext(), GioHangActivity.class);
+            startActivity(gioHang);
         });
 
     }
@@ -156,12 +164,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbarManHinhChinh);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbarManHinhChinh.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
-        toolbarManHinhChinh.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        toolbarManHinhChinh.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
     }
 
     private void setControl() {

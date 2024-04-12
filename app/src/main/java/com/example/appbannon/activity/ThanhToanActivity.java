@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,71 +75,66 @@ public class ThanhToanActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
-        btnDatHang.setOnClickListener(new View.OnClickListener() {
+        btnDatHang.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
+            String diaChi = Objects.requireNonNull(edtDiaChi.getText()).toString().trim();
+            if (TextUtils.isEmpty(diaChi)) {
+                Toast.makeText(ThanhToanActivity.this, "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
+            } else {
+                // post data
+                DonHang donHang = new DonHang();
+                donHang.setEmail(tvEmail.getText().toString());
+                donHang.setSdt(tvSDT.getText().toString());
+                donHang.setUserId(Utils.currentUser.getId());
+                donHang.setTongTien(String.valueOf(tongTien));
+                donHang.setDiaChi(edtDiaChi.getText().toString());
+                donHang.setSoLuong(totalItem);
+                donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
+                System.out.println("chitiet" + new Gson().toJson(Utils.mangMuaHang));
 
-                String diaChi = Objects.requireNonNull(edtDiaChi.getText()).toString().trim();
-                if (TextUtils.isEmpty(diaChi)) {
-                    Toast.makeText(ThanhToanActivity.this, "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
-                } else {
-                    // post data
-                    DonHang donHang = new DonHang();
-                    donHang.setEmail(tvEmail.getText().toString());
-                    donHang.setSdt(tvSDT.getText().toString());
-                    donHang.setUserId(Utils.currentUser.getId());
-                    donHang.setTongTien(String.valueOf(tongTien));
-                    donHang.setDiaChi(edtDiaChi.getText().toString());
-                    donHang.setSoLuong(totalItem);
-                    donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
-                    // gửi api tạo đơn hàng và tạo chi tiết đơn hàng
-                    OrderApiCalls.create(donHang, maDonHang -> {
-                        if (maDonHang != -1) {
-                            // Nếu thêm đơn hàng thành công thì thực hiện xóa sản phẩm
-                            // ra khỏi giỏ hàng
+                // gửi api tạo đơn hàng và tạo chi tiết đơn hàng
+                OrderApiCalls.create(donHang, maDonHang -> {
+                    if (maDonHang != -1) {
+                        // Nếu thêm đơn hàng thành công thì thực hiện xóa sản phẩm
+                        // ra khỏi giỏ hàng
 
-                            for (GioHang gh : Utils.mangMuaHang) {
-                                // xóa sản phẩm đã mua trong database
-                                CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> {
-                                    CartApiCalls.getAll(Utils.currentUser.getId(), mangGioHang -> {
-                                        // cập nhật mảng giỏ hàng
-                                        Utils.mangGioHang = mangGioHang;
-                                    }, compositeDisposable);
+                        for (GioHang gh : Utils.mangMuaHang) {
+                            // xóa sản phẩm đã mua trong database
+                            CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> {
+                                CartApiCalls.getAll(Utils.currentUser.getId(), mangGioHang -> {
+                                    // cập nhật mảng giỏ hàng
+                                    Utils.mangGioHang = mangGioHang;
                                 }, compositeDisposable);
+                            }, compositeDisposable);
 
-                            }
-                            // mảng mua hàng sẽ trống
-                            Utils.mangMuaHang.clear();
-                            Toast.makeText(ThanhToanActivity.this, "Thêm đơn hàng thành công!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(ThanhToanActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                         }
-                    }, compositeDisposable);
-                }
+                        // mảng mua hàng sẽ trống
+                        Utils.mangMuaHang.clear();
+                        Toast.makeText(ThanhToanActivity.this, "Thêm đơn hàng thành công!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(ThanhToanActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                    }
+                }, compositeDisposable);
             }
         });
 
-        btnZaloPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String diaChi = Objects.requireNonNull(edtDiaChi.getText()).toString().trim();
-                if (TextUtils.isEmpty(diaChi)) {
-                    Toast.makeText(ThanhToanActivity.this, "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
-                } else {
-                    donHang = new DonHang();
-                    donHang.setUserId(Utils.currentUser.getId());
-                    donHang.setEmail(tvEmail.getText().toString());
-                    donHang.setSdt(tvSDT.getText().toString());
-                    donHang.setTongTien(String.valueOf(tongTien));
-                    donHang.setDiaChi(edtDiaChi.getText().toString());
-                    donHang.setSoLuong(totalItem);
-                    donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
-                    requestZaloPay();
+        btnZaloPay.setOnClickListener(v -> {
+            String diaChi = Objects.requireNonNull(edtDiaChi.getText()).toString().trim();
+            if (TextUtils.isEmpty(diaChi)) {
+                Toast.makeText(ThanhToanActivity.this, "Bạn chưa nhập địa chỉ", Toast.LENGTH_SHORT).show();
+            } else {
+                donHang = new DonHang();
+                donHang.setUserId(Utils.currentUser.getId());
+                donHang.setEmail(tvEmail.getText().toString());
+                donHang.setSdt(tvSDT.getText().toString());
+                donHang.setTongTien(String.valueOf(tongTien));
+                donHang.setDiaChi(edtDiaChi.getText().toString());
+                donHang.setSoLuong(totalItem);
+                donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
+                requestZaloPay();
 
-                }
             }
         });
     }
@@ -218,12 +212,7 @@ public class ThanhToanActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         // Khi nhấn vào nút trở về thì trở về trang chủ
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void setControl() {

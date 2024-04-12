@@ -1,22 +1,21 @@
 package com.example.appbannon.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.appbannon.R;
 import com.example.appbannon.adapter.GioHangAdapter;
 import com.example.appbannon.model.EventBus.TinhTongEvent;
-import com.example.appbannon.model.GioHang;
+import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,8 +23,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Objects;
+
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class GioHangActivity extends AppCompatActivity {
 
@@ -35,29 +35,36 @@ public class GioHangActivity extends AppCompatActivity {
     RecyclerView recyclerViewGioHang;
     GioHangAdapter adapter;
     long tongTienSP;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gio_hang);
         setControl();
+        initData();
         initControl();
         ActionToolBar();
         setEvent();
         tinhTongTien();
     }
 
+    private void initData() {
+        CartApiCalls.getAll(Utils.currentUser.getId(), gioHangList -> {
+            Utils.mangGioHang = gioHangList;
+        }, compositeDisposable);
+    }
+
     private void setEvent() {
-        btnMuaHang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Utils.mangMuaHang.size() == 0) {
-                    Toast.makeText(GioHangActivity.this, "Bạn phải chọn ít nhất 1 sản phẩm", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
-                    intent.putExtra("tongTien", tongTienSP);
-                    startActivity(intent);
-                }
+
+        // Xử lý sự kiện nút mua hàng được nhấn
+        btnMuaHang.setOnClickListener(v -> {
+            if (Utils.mangMuaHang.size() == 0) {
+                Toast.makeText(GioHangActivity.this, "Bạn phải chọn ít nhất 1 sản phẩm", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
+                intent.putExtra("tongTien", tongTienSP);
+                startActivity(intent);
             }
         });
     }
@@ -91,6 +98,7 @@ public class GioHangActivity extends AppCompatActivity {
         // Khi nhấn vào nút trở về thì trở về trang chủ
         toolbar.setNavigationOnClickListener(v -> finish());
     }
+
     private void setControl() {
         tvGioHangTrong = findViewById(R.id.tvGioHangTrong);
         tvTongTien = findViewById(R.id.tvTongTien);
@@ -128,4 +136,15 @@ public class GioHangActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
 }
