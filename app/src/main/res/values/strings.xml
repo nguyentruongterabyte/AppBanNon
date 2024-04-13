@@ -32,4 +32,9 @@
     <string name="usernameTitle">Họ và tên</string>
     <string name="appName">App bán nón</string>
     <string name="defaultQuantity">1</string>
+    <string name="orderId">Đơn hàng: 123</string>
+    <string name="quantity">x2</string>
+    <string name="totalCost">Thành tiền: đ20.000</string>
+    <string name="totalItems">1 sản phẩm</string>
+    <string name="orderStatus">Chờ xác nhận</string>
 </resources>

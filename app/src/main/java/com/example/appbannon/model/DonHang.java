@@ -1,5 +1,7 @@
 package com.example.appbannon.model;
 
+import java.util.List;
+
 public class DonHang {
 
     private String maDonHang;
@@ -10,8 +12,26 @@ public class DonHang {
     private String diaChi;
     private int soLuong;
     private String chiTiet;
+    List<SanPham> items;
+    private String trangThai;
 
     public DonHang() {
+    }
+
+    public List<SanPham> getItems() {
+        return items;
+    }
+
+    public void setItems(List<SanPham> items) {
+        this.items = items;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
     }
 
     public int getUserId() {

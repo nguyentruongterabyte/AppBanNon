@@ -85,6 +85,12 @@ public interface ApiBanHang {
             @Field("chiTiet") String chiTiet
     );
 
+    @POST("orders-history.php")
+    @FormUrlEncoded
+    Observable<DonHangModel> xemDonHang(
+            @Field("userId") int userId
+    );
+
     @POST("orders-update-token.php")
     @FormUrlEncoded
     Observable<MessageModel> updateToken(

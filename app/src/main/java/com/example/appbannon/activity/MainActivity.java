@@ -102,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(danhSachSanPham);
                     break;
                 case 2:
+                    Intent donHang = new Intent(getApplicationContext(), XemDonHangActivity.class);
+                    startActivity(donHang);
+                    break;
+                case 3:
                     // xóa key user
                     Paper.book().delete("user");
                     Paper.book().delete("isLogin");
