@@ -37,4 +37,5 @@
     <string name="totalCost">Thành tiền: đ20.000</string>
     <string name="totalItems">1 sản phẩm</string>
     <string name="orderStatus">Chờ xác nhận</string>
+    <string name="forgetPassword">Quên mật khẩu</string>
 </resources>

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -24,8 +26,9 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class DangNhapActivity extends AppCompatActivity {
     ToggleButton toggleButtonVisibility;
+    ProgressBar progressBar;
     TextInputEditText edtPassword, edtEmail;
-    TextView tvChuyenDangKy;
+    TextView tvChuyenDangKy, tvResetPass;
     AppCompatButton btnDangNhap;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -40,6 +43,14 @@ public class DangNhapActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
+
+        // Xử lý khi text view reset pass được nhấn
+        tvResetPass.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
+            startActivity(intent);
+        });
+
+        // xử lý sự kiện nút bật tắt xem mật khẩu được nhấn
         toggleButtonVisibility.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 // Show password
@@ -81,6 +92,7 @@ public class DangNhapActivity extends AppCompatActivity {
                 Paper.book().write("password", password);
 
                 //post data
+                progressBar.setVisibility(View.VISIBLE);
                 dangNhap(email, password);
 
             }
@@ -97,6 +109,7 @@ public class DangNhapActivity extends AppCompatActivity {
                 Utils.currentUser = userModel.getResult();
                 Paper.book().write("user", userModel.getResult());
 
+                progressBar.setVisibility(View.INVISIBLE);
                 // Nếu đăng nhập thành công, chuyển về màn hình trang chủ
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -104,6 +117,7 @@ public class DangNhapActivity extends AppCompatActivity {
             } else {
                 // Thông báo lỗi nếu email hoặc mật khẩu không đúng
                 Toast.makeText(DangNhapActivity.this, userModel.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
             }
         }, compositeDisposable);
     }
@@ -118,8 +132,11 @@ public class DangNhapActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
 
         tvChuyenDangKy = findViewById(R.id.tvChuyenDangKy);
+        tvResetPass = findViewById(R.id.tvResetPass);
 
         btnDangNhap = findViewById(R.id.btnDangNhap);
+
+        progressBar = findViewById(R.id.processBarLogin);
 
 
         // đọc dữ liệu của email và password những lần đăng nhập trước đó

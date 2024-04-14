@@ -1,10 +1,8 @@
 package com.example.appbannon.networking;
 
 
-import android.util.Log;
-
+import com.example.appbannon.model.MessageModel;
 import com.example.appbannon.model.User;
-
 import com.example.appbannon.model.UserModel;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
@@ -38,5 +36,15 @@ public class UserApiCalls {
                     callback.accept(new UserModel(false, throwable.getMessage()));
                 })
         );
+    }
+
+    // Gửi yêu cầu reset mật khẩu
+    public static void requestResetPassword(String email, Consumer<MessageModel> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.guiYeuCauResetMatKhau(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback, throwable -> {
+                    callback.accept(new MessageModel(false, throwable.getMessage()));
+                }));
     }
 }

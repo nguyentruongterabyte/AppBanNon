@@ -115,4 +115,10 @@ public interface ApiBanHang {
             @Field("password") String password
     );
 
+    @POST("user-reset-password-request.php")
+    @FormUrlEncoded
+    Observable<MessageModel> guiYeuCauResetMatKhau(
+            @Field("email") String email
+    );
+
 }
