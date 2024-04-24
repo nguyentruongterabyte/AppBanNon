@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppBanNon</string>
+    <string name="app_name">Hat shop</string>
     <string name="hat_name">Nón lưỡi trai</string>
     <string name="hatCost">Giá: 250000</string>
     <string name="hatName">Tên sản phẩm</string>
@@ -38,4 +38,6 @@
     <string name="totalItems">1 sản phẩm</string>
     <string name="orderStatus">Chờ xác nhận</string>
     <string name="forgetPassword">Quên mật khẩu</string>
+    <string name="newProducts">Sản phẩm mới nhất</string>
+    <string name="categoryTitle">Trang chủ</string>
 </resources>

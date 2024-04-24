@@ -13,10 +13,11 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiBanHang {
     // Danh mục
-    @GET("danhmuc.php")
+    @GET("categories.php")
     Observable<DanhMucModel> getDanhMuc();
 
 
@@ -29,6 +30,12 @@ public interface ApiBanHang {
     Observable<SanPhamModel> getDanhSachSanPham(
             @Field("page") int page,
             @Field("amount") int amount
+    );
+
+    @GET("products")
+    Observable<SanPhamModel> getDanhSachSanPham2(
+            @Query("page") int page,
+            @Query("amount") int amount
     );
 
     @POST("products-search.php")

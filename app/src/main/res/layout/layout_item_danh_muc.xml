@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="15dp"
     android:orientation="horizontal"
     android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:paddingBottom="12dp"
+    tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:id="@+id/item_danh_muc_image"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginLeft="15sp"
-        android:src="@drawable/ic_media" />
+        android:layout_marginStart="15sp"
+        android:src="@drawable/ic_media"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/item_ten_danh_muc"
@@ -21,11 +23,10 @@
         android:minWidth="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:text="Trang chủ"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
         android:textColor="#F44336"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_weight="1"
-        />
+        android:text="@string/categoryTitle" />
 </LinearLayout>

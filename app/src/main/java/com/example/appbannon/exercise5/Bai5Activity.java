@@ -1,8 +1,7 @@
 package com.example.appbannon.exercise5;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.appbannon.R;
 
@@ -30,31 +31,30 @@ public class Bai5Activity extends AppCompatActivity {
     CustomAdapterSanPham adapterSanPham;
     DatabaseSP dbSanPham;
     int index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bai5);
         setControl();
         setEvent();
+        dbSanPham = new DatabaseSP(this);
+        Init();
+        adapterLoaiSP = new ArrayAdapter(this, android.R.layout.simple_list_item_1, dataLoaiSP);
+        spinnerLoaiSP.setAdapter(adapterLoaiSP);
     }
 
     private void setEvent() {
-        dbSanPham = new DatabaseSP(this);
-        Init();
 
-        adapterLoaiSP = new ArrayAdapter(this, android.R.layout.simple_list_item_1, dataLoaiSP);
-        spinnerLoaiSP.setAdapter(adapterLoaiSP);
         spinnerLoaiSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             // khi người dùng chọn loại sản phẩm thì thay đổi hình ảnh tương tự
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (spinnerLoaiSP.getSelectedItem().equals("SamSung")) {
                     ivHinhLoaiSP.setImageResource(R.drawable.samsung);
-                }
-                else if (spinnerLoaiSP.getSelectedItem().equals("Iphone")) {
+                } else if (spinnerLoaiSP.getSelectedItem().equals("Iphone")) {
                     ivHinhLoaiSP.setImageResource(R.drawable.iphone);
-                }
-                else if (spinnerLoaiSP.getSelectedItem().equals("Nokia")) {
+                } else if (spinnerLoaiSP.getSelectedItem().equals("Nokia")) {
                     ivHinhLoaiSP.setImageResource(R.drawable.nokia);
                 }
             }
@@ -75,9 +75,7 @@ public class Bai5Activity extends AppCompatActivity {
             public void onClick(View v) {
                 themDL();
                 docDL();
-                edtMaSP.setText("");
-                edtTenSP.setText("");
-                edtGiaSP.setText("");
+
             }
         });
 
@@ -170,14 +168,31 @@ public class Bai5Activity extends AppCompatActivity {
     private void themDL() {
         // Khởi tạo một sản phẩm mới với các thông tin lấy từ người dùng nhập vào
         SanPham sanPham = new SanPham();
-        sanPham.setMaSP(edtMaSP.getText().toString());
-        sanPham.setTenSP(edtTenSP.getText().toString());
-        sanPham.setGiaSP(edtGiaSP.getText().toString());
-        sanPham.setLoaiSP(spinnerLoaiSP.getSelectedItem().toString());
+        String maSP = edtMaSP.getText().toString();
+        String tenSP = edtTenSP.getText().toString();
+        String giaSP = edtGiaSP.getText().toString();
 
-        //  Lưu sản phẩm vào database
-        dbSanPham.themDL(sanPham);
-        Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(maSP)) {
+            Toast.makeText(this, "Bạn chưa nhập mã sản phẩm", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(tenSP)) {
+            Toast.makeText(this, "Bạn chưa nhập tên sản phẩm", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(giaSP)) {
+            Toast.makeText(this, "Bạn chưa nhập giá sản phẩm", Toast.LENGTH_SHORT).show();
+        } else {
+
+            sanPham.setMaSP(maSP);
+            sanPham.setTenSP(tenSP);
+            sanPham.setGiaSP(giaSP);
+            sanPham.setLoaiSP(spinnerLoaiSP.getSelectedItem().toString());
+
+            edtMaSP.setText("");
+            edtTenSP.setText("");
+            edtGiaSP.setText("");
+            //  Lưu sản phẩm vào database
+            dbSanPham.themDL(sanPham);
+            Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 

@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         viewFlipper.setFlipInterval(3000);
         viewFlipper.setAutoStart(true);
 
-//        Set animation cho view flipper
+        // Set animation cho view flipper
         Animation slideIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_right);
         Animation slideOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
 

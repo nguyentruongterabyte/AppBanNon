@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -20,6 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="Danh sách sản phẩm"
             tools:layout_editor_absoluteX="10dp">
+
             <LinearLayout
                 android:layout_marginRight="15dp"
                 android:orientation="horizontal"
@@ -27,6 +28,7 @@
                 android:layout_gravity="right"
                 android:layout_height="?attr/actionBarSize"
                 tools:ignore="RtlHardcoded">
+
                 <ImageView
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
@@ -35,16 +37,19 @@
                     android:layout_height="?attr/actionBarSize"
                     android:src="@drawable/ic_search"
                     android:contentDescription="@string/icSearchDescription" />
+
                 <FrameLayout
                     android:id="@+id/frameGioHangManHinhChinh"
                     android:layout_width="55dp"
                     android:layout_height="match_parent"
                     tools:ignore="RtlHardcoded">
+
                     <com.nex3z.notificationbadge.NotificationBadge
                         android:id="@+id/menuSoLuong"
                         android:layout_gravity="top|right"
                         android:layout_width="28dp"
-                        android:layout_height="28dp"/>
+                        android:layout_height="28dp" />
+
                     <ImageView
                         android:layout_marginTop="15dp"
                         android:src="@drawable/ic_cart_shopping"

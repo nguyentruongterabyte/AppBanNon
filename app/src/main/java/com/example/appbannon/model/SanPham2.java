@@ -1,25 +1,19 @@
 package com.example.appbannon.model;
 
-import java.io.Serializable;
-
-public class SanPham implements Serializable {
-    private int maSanPham;
+public class SanPham2 {
+    private String maSanPham;
     private String tenSanPham;
-    private String giaSanPham;
-    private String hinhAnh;
-
-    private KieuDang kieuDang;
     private int soLuong;
     private String gioiTinh;
     private String mauSac;
     private Boolean trangThai;
+    private KieuDang kieuDang;
 
-
-    public int getMaSanPham() {
+    public String getMaSanPham() {
         return maSanPham;
     }
 
-    public void setMaSanPham(int maSanPham) {
+    public void setMaSanPham(String maSanPham) {
         this.maSanPham = maSanPham;
     }
 
@@ -29,30 +23,6 @@ public class SanPham implements Serializable {
 
     public void setTenSanPham(String tenSanPham) {
         this.tenSanPham = tenSanPham;
-    }
-
-    public String getGiaSanPham() {
-        return giaSanPham;
-    }
-
-    public void setGiaSanPham(String giaSanPham) {
-        this.giaSanPham = giaSanPham;
-    }
-
-    public String getHinhAnh() {
-        return hinhAnh;
-    }
-
-    public void setHinhAnh(String hinhAnh) {
-        this.hinhAnh = hinhAnh;
-    }
-
-    public KieuDang getKieuDang() {
-        return kieuDang;
-    }
-
-    public void setKieuDang(KieuDang kieuDang) {
-        this.kieuDang = kieuDang;
     }
 
     public int getSoLuong() {
@@ -85,5 +55,13 @@ public class SanPham implements Serializable {
 
     public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public KieuDang getKieuDang() {
+        return kieuDang;
+    }
+
+    public void setKieuDang(KieuDang kieuDang) {
+        this.kieuDang = kieuDang;
     }
 }

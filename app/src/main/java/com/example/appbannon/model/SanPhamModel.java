@@ -6,6 +6,15 @@ public class SanPhamModel {
     private boolean success;
     private String message;
     private List<SanPham> result;
+    private List<SanPham2> content;
+
+    public List<SanPham2> getContent() {
+        return content;
+    }
+
+    public void setContent(List<SanPham2> content) {
+        this.content = content;
+    }
 
     public boolean isSuccess() {
         return success;

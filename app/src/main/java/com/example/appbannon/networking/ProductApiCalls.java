@@ -2,13 +2,11 @@ package com.example.appbannon.networking;
 
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.appbannon.adapter.SanPhamAdapter;
-import com.example.appbannon.adapter.SanPhamMoiAdapter;
-import com.example.appbannon.model.SanPhamModel;
+import com.example.appbannon.model.SanPham2;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
+import com.example.appbannon.retrofit.RetrofitService;
 import com.example.appbannon.utils.Utils;
 
 import java.util.ArrayList;
@@ -21,6 +19,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ProductApiCalls {
     private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+    private static final RetrofitService retrofitService = new RetrofitService();
+    private static final ApiBanHang apiBanHang2 = retrofitService.getRetrofit().create(ApiBanHang.class);
+
     // get 10 sản phẩm mới thêm vào danh sách sản phẩm
     public static void get10(Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.getDanhSachSanPhamMoi()
@@ -58,6 +59,19 @@ public class ProductApiCalls {
                 ));
     }
 
+    public static void getInAPage2(int page, Consumer<List<SanPham2>> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.getDanhSachSanPham2(page, 6)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        sanPhamModel -> {
+                            callback.accept(sanPhamModel.getContent());
+                        }, throwable -> {
+                            callback.accept(new ArrayList<>());
+                        }
+                ));
+    }
+
     public static void search(String key, Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.getDanhSachSanPhamTimKiem(key)
                 .subscribeOn(Schedulers.io())
@@ -73,6 +87,6 @@ public class ProductApiCalls {
                         }, throwable -> {
                             callback.accept(new ArrayList<>());
                         }
-                        ));
+                ));
     }
 }
