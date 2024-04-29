@@ -189,7 +189,11 @@ public class ChiTietActivity extends AppCompatActivity {
                     "\n- Giới tính: " + sanPham.getGioiTinh() +
                     "\n- Số lượng: " + sanPham.getSoLuong();
             tvMoTaChiTiet.setText(moTa);
-            Glide.with(getApplicationContext()).load(sanPham.getHinhAnh()).into(imageChiTiet);
+            if (sanPham.getHinhAnh().contains("http")) {
+                Glide.with(getApplicationContext()).load(sanPham.getHinhAnh()).into(imageChiTiet);
+            } else {
+                Glide.with(getApplicationContext()).load(Utils.BASE_URL + Utils.BASE_IMAGE_URL + "product/" + sanPham.getHinhAnh()).into(imageChiTiet);
+            }
         }
 
         // Nếu sản phẩm đã được thêm vào giỏ hàng trước đó

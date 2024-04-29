@@ -54,7 +54,11 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
         GioHang gioHang = gioHangList.get(position);
         holder.itemGioHangTenSP.setText(gioHang.getTenSanPham());
         holder.itemGioHangSoLuong.setText(String.valueOf(gioHang.getSoLuong()));
-        Glide.with(context).load(gioHang.getHinhAnh()).into(holder.itemGioHangImage);
+        if (gioHang.getHinhAnh().contains("http")) {
+            Glide.with(context).load(gioHang.getHinhAnh()).into(holder.itemGioHangImage);
+        } else {
+            Glide.with(context).load(Utils.BASE_URL + Utils.BASE_IMAGE_URL + "product/" + gioHang.getHinhAnh()).into(holder.itemGioHangImage);
+        }
         DecimalFormat dft = new DecimalFormat("###,###,###");
         // giá của 1 sản phẩm * số lượng
         holder.itemGioHangGiaSP.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(gioHang.getGiaSanPham()))));
@@ -127,6 +131,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                                     Utils.mangMuaHang.remove(index);
                                 }
                                 Utils.mangGioHang.remove(pos);
+                                gioHangList.remove(pos);
                                 notifyDataSetChanged();
                                 EventBus.getDefault().postSticky(new TinhTongEvent());
                             }

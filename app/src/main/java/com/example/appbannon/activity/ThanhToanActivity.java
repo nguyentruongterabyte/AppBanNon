@@ -163,11 +163,11 @@ public class ThanhToanActivity extends AppCompatActivity {
                                 for (GioHang gh : Utils.mangMuaHang) {
                                     // xóa sản phẩm đã mua trong database
                                     CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> {
-                                        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
-                                            if (Utils.mangGioHang.get(i).getMaSanPham() == gh.getMaSanPham()) {
-                                                Utils.mangGioHang.remove(i);
-                                                break;
-                                            }
+                                        if (ok) {
+                                            CartApiCalls.getAll(Utils.currentUser.getId(), mangGioHang -> {
+                                                // cập nhật mảng giỏ hàng
+                                                Utils.mangGioHang = mangGioHang;
+                                            }, compositeDisposable);
                                         }
                                     }, compositeDisposable);
 

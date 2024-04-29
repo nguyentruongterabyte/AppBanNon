@@ -3,10 +3,8 @@ package com.example.appbannon.networking;
 
 import android.util.Log;
 
-import com.example.appbannon.model.SanPham2;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
-import com.example.appbannon.retrofit.RetrofitService;
 import com.example.appbannon.utils.Utils;
 
 import java.util.ArrayList;
@@ -17,14 +15,13 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
+
 public class ProductApiCalls {
     private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
-    private static final RetrofitService retrofitService = new RetrofitService();
-    private static final ApiBanHang apiBanHang2 = retrofitService.getRetrofit().create(ApiBanHang.class);
 
     // get 10 sản phẩm mới thêm vào danh sách sản phẩm
     public static void get10(Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPhamMoi()
+        compositeDisposable.add(apiBanHang.getDanhSachSanPhamMoi(10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -42,8 +39,8 @@ public class ProductApiCalls {
     }
 
     // get sản phẩm trên 1 trang để hiển thị lên màn hình danh sách sản phẩm
-    public static void getInAPage(int page, Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPham(page, 6)
+    public static void getInAPage(int page, int amount, Consumer<List<com.example.appbannon.model.SanPham>> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.getDanhSachSanPham(page, amount)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -53,19 +50,6 @@ public class ProductApiCalls {
                             } else {
                                 callback.accept(new ArrayList<>());
                             }
-                        }, throwable -> {
-                            callback.accept(new ArrayList<>());
-                        }
-                ));
-    }
-
-    public static void getInAPage2(int page, Consumer<List<SanPham2>> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.getDanhSachSanPham2(page, 6)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        sanPhamModel -> {
-                            callback.accept(sanPhamModel.getContent());
                         }, throwable -> {
                             callback.accept(new ArrayList<>());
                         }
@@ -89,4 +73,5 @@ public class ProductApiCalls {
                         }
                 ));
     }
+
 }

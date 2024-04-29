@@ -33,6 +33,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class DanhSachSanPhamActivity extends AppCompatActivity {
 
+    static final int PRODUCT_IN_A_PAGE = 8;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerViewDSSanPham;
     ApiBanHang apiBanHang;
@@ -64,8 +65,19 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setEventRefresh() {
-        swipeRefreshLayout.setOnRefreshListener(() -> getDanhSachSanPham(page));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Clear the existing product list
+            page = 1;
+            mangSanPham.clear();
+            // Notify the adapter that the data set has changed
+            sanPhamAdapter.notifyDataSetChanged();
+            // Call the API to fetch the updated product list
+            getDanhSachSanPham(page); // Start fetching from the first page
+
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     private void setEventClick() {
@@ -143,7 +155,7 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
 
     private void getDanhSachSanPham(int page) {
 
-        ProductApiCalls.getInAPage(page, sanPhamList -> {
+        ProductApiCalls.getInAPage(page, PRODUCT_IN_A_PAGE, sanPhamList -> {
             if (sanPhamAdapter == null) {
                 mangSanPham = sanPhamList;
                 sanPhamAdapter = new SanPhamAdapter(getApplicationContext(), mangSanPham);
@@ -154,8 +166,6 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
                     mangSanPham.add(sanPhamList.get(i));
                 }
             }
-            // Once data fetching is complete, call setRefreshing(false) to stop the refreshing animation
-            swipeRefreshLayout.setRefreshing(false);
         }, compositeDisposable);
     }
 

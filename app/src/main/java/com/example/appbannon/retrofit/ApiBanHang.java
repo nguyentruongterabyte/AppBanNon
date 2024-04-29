@@ -12,46 +12,41 @@ import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiBanHang {
     // Danh mục
-    @GET("categories.php")
+    @GET("api/categories/user.php")
     Observable<DanhMucModel> getDanhMuc();
 
 
     // Sản phẩm
-    @GET("products-featured.php")
-    Observable<SanPhamModel> getDanhSachSanPhamMoi();
-
-    @POST("products-page.php")
-    @FormUrlEncoded
-    Observable<SanPhamModel> getDanhSachSanPham(
-            @Field("page") int page,
-            @Field("amount") int amount
+    @GET("api/product/featured.php")
+    Observable<SanPhamModel> getDanhSachSanPhamMoi(
+            @Query("amount") int amount
     );
 
-    @GET("products")
-    Observable<SanPhamModel> getDanhSachSanPham2(
+    @GET("api/product/page.php")
+    Observable<SanPhamModel> getDanhSachSanPham(
             @Query("page") int page,
             @Query("amount") int amount
     );
 
-    @POST("products-search.php")
-    @FormUrlEncoded
+    @GET("api/product/search.php")
     Observable<SanPhamModel> getDanhSachSanPhamTimKiem(
-            @Field("key") String key
+            @Query("key") String key
     );
 
     // giỏ hàng
-    @POST("cart-list.php")
-    @FormUrlEncoded
+    @GET("api/cart/list.php")
     Observable<GioHangModel> getDanhSachSanPhamTrongGioHang(
-            @Field("userId") int userId
+            @Query("userId") int userId
     );
 
-    @POST("cart-create.php")
+    @POST("api/cart/create.php")
     @FormUrlEncoded
     Observable<GioHangModel> themSanPhamVaoGioHang(
             @Field("maSanPham") int maSanPham,
@@ -62,7 +57,7 @@ public interface ApiBanHang {
             @Field("soLuong") int soLuong
     );
 
-    @POST("cart-update-products.php")
+    @PUT("api/cart/update-products.php")
     @FormUrlEncoded
     Observable<GioHangModel> updateSanPhamTrongGioHang(
             @Field("maSanPham") int maSanPham,
@@ -71,7 +66,7 @@ public interface ApiBanHang {
             @Field("soLuong") int soLuong
     );
 
-    @POST("cart-delete-product.php")
+    @HTTP(method = "DELETE", path = "api/cart/delete-product.php", hasBody = true)
     @FormUrlEncoded
     Observable<GioHangModel> xoaSanPhamKhoiGioHang(
             @Field("maSanPham") int maSanPham,
@@ -80,7 +75,7 @@ public interface ApiBanHang {
 
 
     // Đơn hàng
-    @POST("orders-create.php")
+    @POST("api/order/create.php")
     @FormUrlEncoded
     Observable<DonHangModel> createDonHang(
             @Field("sdt") String sdt,
@@ -92,13 +87,12 @@ public interface ApiBanHang {
             @Field("chiTiet") String chiTiet
     );
 
-    @POST("orders-history.php")
-    @FormUrlEncoded
+    @GET("api/order/history.php")
     Observable<DonHangModel> xemDonHang(
-            @Field("userId") int userId
+            @Query("userId") int userId
     );
 
-    @POST("orders-update-token.php")
+    @PUT("api/order/update-token.php")
     @FormUrlEncoded
     Observable<MessageModel> updateToken(
             @Field("token") String token,
@@ -106,7 +100,7 @@ public interface ApiBanHang {
     );
 
     // user
-    @POST("user-register.php")
+    @POST("api/user/register.php")
     @FormUrlEncoded
     Observable<UserModel> dangKy(
             @Field("email") String email,
@@ -115,14 +109,14 @@ public interface ApiBanHang {
             @Field("mobile") String mobile
     );
 
-    @POST("user-login.php")
+    @POST("api/user/login.php")
     @FormUrlEncoded
     Observable<UserModel> dangNhap(
             @Field("email") String email,
             @Field("password") String password
     );
 
-    @POST("user-reset-password-request.php")
+    @POST("api/user/reset-password-request.php")
     @FormUrlEncoded
     Observable<MessageModel> guiYeuCauResetMatKhau(
             @Field("email") String email

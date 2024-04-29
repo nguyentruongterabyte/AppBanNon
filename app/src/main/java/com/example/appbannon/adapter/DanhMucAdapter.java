@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
 import com.example.appbannon.model.DanhMuc;
+import com.example.appbannon.utils.Utils;
 
 import java.util.List;
 
@@ -57,7 +58,11 @@ public class DanhMucAdapter extends BaseAdapter {
 
         }
         viewHolder.textTenDanhMuc.setText(array.get(i).getTenDanhMuc());
-        Glide.with(context).load(array.get(i).getHinhAnh()).into(viewHolder.ivHinhAnh);
+        if (array.get(i).getHinhAnh().contains("http")) {
+            Glide.with(context).load(array.get(i).getHinhAnh()).into(viewHolder.ivHinhAnh);
+        } else {
+            Glide.with(context).load(Utils.BASE_URL + array.get(i).getHinhAnh()).into(viewHolder.ivHinhAnh);
+        }
         return view;
     }
 

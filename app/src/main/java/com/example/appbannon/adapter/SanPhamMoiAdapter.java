@@ -16,6 +16,7 @@ import com.example.appbannon.Interface.ItemClickListener;
 import com.example.appbannon.R;
 import com.example.appbannon.activity.ChiTietActivity;
 import com.example.appbannon.model.SanPham;
+import com.example.appbannon.utils.Utils;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -45,8 +46,11 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
 
         DecimalFormat dft = new DecimalFormat("###,###,###");
         holder.tvGia.setText(String.format("Giá: %sđ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
-        Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
-
+        if (sanPham.getHinhAnh().contains("http")) {
+            Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
+        } else {
+            Glide.with(context).load(Utils.BASE_URL + Utils.BASE_IMAGE_URL + "product/" + sanPham.getHinhAnh()).into(holder.image);
+        }
         holder.setItemClickListener((view, pos, isLongClick) -> {
             if (!isLongClick) {
                 Intent intent = new Intent(context, ChiTietActivity.class);

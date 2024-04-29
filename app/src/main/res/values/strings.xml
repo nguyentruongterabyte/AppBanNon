@@ -40,4 +40,13 @@
     <string name="forgetPassword">Quên mật khẩu</string>
     <string name="newProducts">Sản phẩm mới nhất</string>
     <string name="categoryTitle">Trang chủ</string>
+    <string name="productNameHint">Tên sản phẩm</string>
+    <string name="productCost">Giá sản phẩm</string>
+    <string name="productImageURLHint">Hình ảnh</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="unisex">Unisex</string>
+    <string name="productColorHint">Màu sắc</string>
+    <string name="productQuantityHint">Số lượng</string>
+    <string name="saveProductButton">Lưu sản phẩm</string>
 </resources>
