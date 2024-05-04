@@ -108,6 +108,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                             holder.itemGioHangSoLuong.setText(String.valueOf(soLuongMoi));
                             holder.itemGioHangGiaSP.setText(String.format("Giá: %s", dft.format(giaMoi)));
                             // Gọi hàm tính tổng tiền bằng event bus bên GioHangActivity
+                            Utils.mangGioHang = gioHangList;
                             EventBus.getDefault().postSticky(new TinhTongEvent());
 
                         }
@@ -130,8 +131,9 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                                 if (index != -1) {
                                     Utils.mangMuaHang.remove(index);
                                 }
-                                Utils.mangGioHang.remove(pos);
                                 gioHangList.remove(pos);
+                                Utils.mangGioHang = gioHangList;
+
                                 notifyDataSetChanged();
                                 EventBus.getDefault().postSticky(new TinhTongEvent());
                             }
@@ -157,7 +159,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
                             gioHangList.get(pos).setSoLuong(soLuongMoi);
                             holder.itemGioHangSoLuong.setText(String.valueOf(soLuongMoi));
                             holder.itemGioHangGiaSP.setText(String.format("Giá: %s", dft.format(giaMoi)));
-
+                            Utils.mangGioHang = gioHangList;
                             EventBus.getDefault().postSticky(new TinhTongEvent());
                         }
                     }, compositeDisposable);

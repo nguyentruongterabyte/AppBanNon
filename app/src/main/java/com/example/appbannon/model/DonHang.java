@@ -1,8 +1,9 @@
 package com.example.appbannon.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DonHang {
+public class DonHang implements Serializable {
 
     private String maDonHang;
     private String sdt;
@@ -14,12 +15,31 @@ public class DonHang {
     private String chiTiet;
     List<SanPham> items;
     private String trangThai;
+    private String ngayTao;
+    private String token;
+
 
     public DonHang() {
     }
 
     public List<SanPham> getItems() {
         return items;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getNgayTao() {
+        return ngayTao;
+    }
+
+    public void setNgayTao(String ngayTao) {
+        this.ngayTao = ngayTao;
     }
 
     public void setItems(List<SanPham> items) {

@@ -4,6 +4,7 @@ package com.example.appbannon.retrofit;
 import com.example.appbannon.model.DanhMucModel;
 import com.example.appbannon.model.DonHangModel;
 import com.example.appbannon.model.GioHangModel;
+import com.example.appbannon.model.HoaDonModel;
 import com.example.appbannon.model.MessageModel;
 import com.example.appbannon.model.SanPhamModel;
 import com.example.appbannon.model.UserModel;
@@ -121,5 +122,11 @@ public interface ApiBanHang {
     Observable<MessageModel> guiYeuCauResetMatKhau(
             @Field("email") String email
     );
+
+    // Hóa đơn
+    // Hóa đơn
+    @GET("api/bill/get.php")
+    Observable<HoaDonModel> getHoaDon(@Query("maDonHang") int maDonHang);
+
 
 }

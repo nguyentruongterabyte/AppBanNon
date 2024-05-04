@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(dangNhap);
                     finish();
                     break;
+                case 4:
+                    Intent map = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(map);
             }
         });
         frameLayoutGioHang.setOnClickListener(v -> {

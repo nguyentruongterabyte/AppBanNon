@@ -49,4 +49,6 @@
     <string name="productColorHint">Màu sắc</string>
     <string name="productQuantityHint">Số lượng</string>
     <string name="saveProductButton">Lưu sản phẩm</string>
+    <string name="createFilePDF">Xuất file pdf</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -28,6 +29,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -80,6 +84,8 @@ dependencies {
 
     // lottie
     implementation("com.airbnb.android:lottie:6.4.0")
+    // google map
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
 
 }
