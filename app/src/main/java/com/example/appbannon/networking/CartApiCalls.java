@@ -23,7 +23,7 @@ public class CartApiCalls {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         gioHangModel -> {
-                            if (gioHangModel.isSuccess()) {
+                            if (gioHangModel.getStatus() == 200) {
                                 callback.accept(gioHangModel.getResult());
                             } else {
                                 callback.accept(new ArrayList<>());
@@ -48,7 +48,7 @@ public class CartApiCalls {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 gioHangModel -> {
-                                    callback.accept(gioHangModel.isSuccess());
+                                    callback.accept(gioHangModel.getStatus() == 200);
                                 }, throwable -> {
                                     callback.accept(false);
                                 }
@@ -67,7 +67,7 @@ public class CartApiCalls {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         gioHangModel -> {
-                            callback.accept(gioHangModel.isSuccess());
+                            callback.accept(gioHangModel.getStatus() == 200);
                         }, throwable -> {
                             callback.accept(false);
                         }
@@ -82,7 +82,7 @@ public class CartApiCalls {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         gioHangModel -> {
-                            callback.accept(gioHangModel.isSuccess());
+                            callback.accept(gioHangModel.getStatus() == 200);
                         }, throwable -> {
                             callback.accept(false);
                         }
@@ -97,7 +97,7 @@ public class CartApiCalls {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         messageModel -> {
-                            callback.accept(messageModel.isSuccess());
+                            callback.accept(messageModel.getStatus() == 200);
                         }, throwable -> {
                             callback.accept(false);
                         }

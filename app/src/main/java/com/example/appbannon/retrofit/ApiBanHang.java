@@ -1,13 +1,15 @@
 package com.example.appbannon.retrofit;
 
 
-import com.example.appbannon.model.DanhMucModel;
-import com.example.appbannon.model.DonHangModel;
-import com.example.appbannon.model.GioHangModel;
-import com.example.appbannon.model.HoaDonModel;
-import com.example.appbannon.model.MessageModel;
-import com.example.appbannon.model.SanPhamModel;
-import com.example.appbannon.model.UserModel;
+import com.example.appbannon.model.DanhMuc;
+import com.example.appbannon.model.DonHang;
+import com.example.appbannon.model.GioHang;
+import com.example.appbannon.model.ResponseObject;
+import com.example.appbannon.model.SanPham;
+import com.example.appbannon.model.ToaDo;
+import com.example.appbannon.model.User;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Field;
@@ -21,35 +23,35 @@ import retrofit2.http.Query;
 public interface ApiBanHang {
     // Danh mục
     @GET("api/categories/user.php")
-    Observable<DanhMucModel> getDanhMuc();
+    Observable<ResponseObject<List<DanhMuc>>> getDanhMuc();
 
 
     // Sản phẩm
     @GET("api/product/featured.php")
-    Observable<SanPhamModel> getDanhSachSanPhamMoi(
+    Observable<ResponseObject<List<SanPham>>> getDanhSachSanPhamMoi(
             @Query("amount") int amount
     );
 
     @GET("api/product/page.php")
-    Observable<SanPhamModel> getDanhSachSanPham(
+    Observable<ResponseObject<List<SanPham>>> getDanhSachSanPham(
             @Query("page") int page,
             @Query("amount") int amount
     );
 
     @GET("api/product/search.php")
-    Observable<SanPhamModel> getDanhSachSanPhamTimKiem(
+    Observable<ResponseObject<List<SanPham>>> getDanhSachSanPhamTimKiem(
             @Query("key") String key
     );
 
     // giỏ hàng
     @GET("api/cart/list.php")
-    Observable<GioHangModel> getDanhSachSanPhamTrongGioHang(
+    Observable<ResponseObject<List<GioHang>>> getDanhSachSanPhamTrongGioHang(
             @Query("userId") int userId
     );
 
     @POST("api/cart/create.php")
     @FormUrlEncoded
-    Observable<GioHangModel> themSanPhamVaoGioHang(
+    Observable<ResponseObject<Void>> themSanPhamVaoGioHang(
             @Field("maSanPham") int maSanPham,
             @Field("userId") int userId,
             @Field("tenSanPham") String tenSanPham,
@@ -60,7 +62,7 @@ public interface ApiBanHang {
 
     @PUT("api/cart/update-products.php")
     @FormUrlEncoded
-    Observable<GioHangModel> updateSanPhamTrongGioHang(
+    Observable<ResponseObject<Void>> updateSanPhamTrongGioHang(
             @Field("maSanPham") int maSanPham,
             @Field("userId") int userId,
             @Field("gia") String gia,
@@ -69,7 +71,7 @@ public interface ApiBanHang {
 
     @HTTP(method = "DELETE", path = "api/cart/delete-product.php", hasBody = true)
     @FormUrlEncoded
-    Observable<GioHangModel> xoaSanPhamKhoiGioHang(
+    Observable<ResponseObject<Void>> xoaSanPhamKhoiGioHang(
             @Field("maSanPham") int maSanPham,
             @Field("userId") int userId
     );
@@ -78,7 +80,7 @@ public interface ApiBanHang {
     // Đơn hàng
     @POST("api/order/create.php")
     @FormUrlEncoded
-    Observable<DonHangModel> createDonHang(
+    Observable<ResponseObject<Integer>> createDonHang(
             @Field("sdt") String sdt,
             @Field("email") String email,
             @Field("userId") int userId,
@@ -89,13 +91,13 @@ public interface ApiBanHang {
     );
 
     @GET("api/order/history.php")
-    Observable<DonHangModel> xemDonHang(
+    Observable<ResponseObject<List<DonHang>>> xemDonHang(
             @Query("userId") int userId
     );
 
     @PUT("api/order/update-token.php")
     @FormUrlEncoded
-    Observable<MessageModel> updateToken(
+    Observable<ResponseObject<Void>> updateToken(
             @Field("token") String token,
             @Field("id") int idDonHang
     );
@@ -103,7 +105,7 @@ public interface ApiBanHang {
     // user
     @POST("api/user/register.php")
     @FormUrlEncoded
-    Observable<UserModel> dangKy(
+    Observable<ResponseObject<User>> dangKy(
             @Field("email") String email,
             @Field("password") String password,
             @Field("username") String username,
@@ -112,21 +114,22 @@ public interface ApiBanHang {
 
     @POST("api/user/login.php")
     @FormUrlEncoded
-    Observable<UserModel> dangNhap(
+    Observable<ResponseObject<User>> dangNhap(
             @Field("email") String email,
             @Field("password") String password
     );
 
     @POST("api/user/reset-password-request.php")
     @FormUrlEncoded
-    Observable<MessageModel> guiYeuCauResetMatKhau(
+    Observable<ResponseObject<Void>> guiYeuCauResetMatKhau(
             @Field("email") String email
     );
 
     // Hóa đơn
-    // Hóa đơn
     @GET("api/bill/get.php")
-    Observable<HoaDonModel> getHoaDon(@Query("maDonHang") int maDonHang);
+    Observable<ResponseObject<DonHang>> getHoaDon(@Query("maDonHang") int maDonHang);
 
-
+    // Tọa độ
+    @GET("api/location/get.php")
+    Observable<ResponseObject<ToaDo>> getToaDo();
 }

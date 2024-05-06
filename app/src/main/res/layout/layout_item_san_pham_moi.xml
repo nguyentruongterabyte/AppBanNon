@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_san_pham_moi_card_view"
     android:layout_width="160dp"
     android:layout_height="wrap_content"
     android:elevation="8dp"
@@ -13,8 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,7 +24,8 @@
                 android:id="@+id/item_san_pham_moi_image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@drawable/ic_media" />
+                android:src="@drawable/ic_media"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/item_ten_san_pham_moi"
@@ -33,25 +34,52 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="3"
-                android:text="Nón lưỡi trai"
+                android:minLines="3"
+                android:text="@string/hat_name"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/item_gia_san_pham_moi"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Giá: 250000"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/holo_red_light"/>
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/item_gia_san_pham_moi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2sp"
+                    android:layout_weight="1"
+                    android:gravity="start|left"
+                    android:text="@string/hatCost"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="RtlHardcoded" />
+
+
+                <TextView
+                    android:id="@+id/item_so_luong_da_ban_moi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="1"
+                    android:gravity="right|end"
+                    android:text="@string/soldQuantity"
+                    android:textSize="12sp"
+                    tools:ignore="RtlHardcoded" />
+
+            </LinearLayout>
+
         </LinearLayout>
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="right|top"
-            android:src="@drawable/icon_new" />
+            android:src="@drawable/icon_new"
+            tools:ignore="ContentDescription,RtlHardcoded" />
     </FrameLayout>
 </androidx.cardview.widget.CardView>

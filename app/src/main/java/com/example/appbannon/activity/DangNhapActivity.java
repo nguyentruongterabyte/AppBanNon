@@ -101,7 +101,7 @@ public class DangNhapActivity extends AppCompatActivity {
 
     public void dangNhap(String email, String password) {
         UserApiCalls.login(email, password, userModel -> {
-            if (userModel.isSuccess()) {
+            if (userModel.getStatus() == 200) {
 
                 isLogin = true;
                 // Lưu thông tin người dùng

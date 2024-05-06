@@ -1,16 +1,15 @@
 package com.example.appbannon.model;
 
-public class HoaDonModel {
+public class ResponseObject<T> {
+
+
     private int status;
     private String message;
-    private DonHang result;
+    private T result;
 
-    public HoaDonModel(int status, String message) {
+    public ResponseObject(int status, String message) {
         this.status = status;
         this.message = message;
-    }
-
-    public HoaDonModel() {
     }
 
     public int getStatus() {
@@ -29,11 +28,11 @@ public class HoaDonModel {
         this.message = message;
     }
 
-    public DonHang getResult() {
+    public T getResult() {
         return result;
     }
 
-    public void setResult(DonHang result) {
+    public void setResult(T result) {
         this.result = result;
     }
 }

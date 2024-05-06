@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -15,6 +15,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.appbannon.R;
+import com.example.appbannon.model.ToaDo;
+import com.example.appbannon.networking.LocationApiCalls;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,37 +24,44 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     Button btnMyLocation;
     Button btnGetDirections;
     private GoogleMap gMap;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ToaDo toaDo = new ToaDo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        initData();
         setControl();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
-
         setEvent();
     }
 
+    private void initData() {
+        LocationApiCalls.getLocation(toaDoModel -> {
+            if (toaDoModel.getStatus() == 200) {
+                toaDo = toaDoModel.getResult();
+//                Log.d("mylog", toaDo.toString());
+            } else {
+                Toast.makeText(this, "Không thể lấy được vị trí của cửa hàng", Toast.LENGTH_SHORT).show();
+            }
+        }, compositeDisposable);
+    }
+
     private void setEvent() {
-        btnMyLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enableMyLocation();
-            }
-        });
-        btnGetDirections.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDirections();
-            }
-        });
+//        
+        btnMyLocation.setOnClickListener(v -> enableMyLocation());
+        btnGetDirections.setOnClickListener(v -> getDirections());
     }
 
     private void setControl() {
@@ -62,10 +71,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        gMap = googleMap;
-        LatLng location = new LatLng(10.84897, 106.78736);
-        gMap.addMarker(new MarkerOptions().position(location).title("Shop Âu Đoàn"));
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
+
+        LocationApiCalls.getLocation(toaDoModel -> {
+            if (toaDoModel.getStatus() == 200) {
+                toaDo = toaDoModel.getResult();
+                Log.d("mylog", toaDo.toString());
+                gMap = googleMap;
+
+                LatLng location = new LatLng(toaDo.getViDo(), toaDo.getKinhDo());
+                gMap.addMarker(new MarkerOptions().position(location).title(toaDo.getTenViTri()));
+                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12));
+            } else {
+                Toast.makeText(this, "Không thể lấy được vị trí của cửa hàng", Toast.LENGTH_SHORT).show();
+            }
+        }, compositeDisposable);
+//        Log.d("mylog", toaDo.toString());
     }
 
     private void enableMyLocation() {
@@ -91,8 +111,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void getDirections() {
-        // Create intent to open Google Maps app with directions
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=10.84897,106.78736");
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + toaDo.getViDo() + ',' + toaDo.getKinhDo());
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
 
@@ -103,5 +122,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // Handle the case where the Google Maps app is not available
             Toast.makeText(this, "Google Maps app not found", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
     }
 }

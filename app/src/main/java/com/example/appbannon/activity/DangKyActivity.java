@@ -1,8 +1,5 @@
 package com.example.appbannon.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -10,6 +7,9 @@ import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.appbannon.R;
 import com.example.appbannon.model.User;
@@ -117,7 +117,7 @@ public class DangKyActivity extends AppCompatActivity {
                 // post data
                 User user = new User(email, password, username, mobile);
                 UserApiCalls.register(user, userModel -> {
-                    if (userModel.isSuccess()) {
+                    if (userModel.getStatus() == 200) {
                         Toast.makeText(this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
                         // Lưu email vừa đăng ký thành công để chuyển sang màn hình đăng nhập
                         // để người dùng khỏi nhập lại

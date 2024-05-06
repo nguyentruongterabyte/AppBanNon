@@ -42,7 +42,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 UserApiCalls.requestResetPassword(email, messageModel -> {
-                    if (messageModel.isSuccess()) {
+                    if (messageModel.getStatus() == 200) {
                         Toast.makeText(this, messageModel.getMessage(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), DangNhapActivity.class);
                         startActivity(intent);

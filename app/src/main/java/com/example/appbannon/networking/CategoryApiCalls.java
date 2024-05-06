@@ -1,6 +1,5 @@
 package com.example.appbannon.networking;
 
-import com.example.appbannon.adapter.DanhMucAdapter;
 import com.example.appbannon.model.DanhMuc;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
@@ -24,7 +23,7 @@ public class CategoryApiCalls {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         danhMucModel -> {
-                            if (danhMucModel.isSuccess()) {
+                            if (danhMucModel.getStatus() == 200) {
                                 callback.accept(danhMucModel.getResult());
                             } else {
                                 callback.accept(new ArrayList<>());

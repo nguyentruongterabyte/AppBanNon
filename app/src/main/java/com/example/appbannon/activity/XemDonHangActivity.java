@@ -34,7 +34,7 @@ public class XemDonHangActivity extends AppCompatActivity {
 
     private void getOrders() {
         OrderApiCalls.getAll(Utils.currentUser.getId(), donHangModel -> {
-            if (donHangModel.isSuccess()) {
+            if (donHangModel.getStatus() == 200) {
                 DonHangAdapter adapter = new DonHangAdapter(getApplicationContext(), donHangModel.getResult());
                 recyclerViewDonHang.setAdapter(adapter);
             } else {

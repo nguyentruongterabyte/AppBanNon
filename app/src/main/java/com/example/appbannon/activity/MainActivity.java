@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(donHang);
                     break;
                 case 3:
+                    Intent map = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(map);
+                    break;
+                case 4:
                     // xóa key user
                     Paper.book().delete("user");
                     Paper.book().delete("isLogin");
@@ -113,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(dangNhap);
                     finish();
                     break;
-                case 4:
-                    Intent map = new Intent(getApplicationContext(), MapActivity.class);
-                    startActivity(map);
             }
         });
         frameLayoutGioHang.setOnClickListener(v -> {

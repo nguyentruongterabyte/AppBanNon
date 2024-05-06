@@ -8,12 +8,20 @@ public class SanPham implements Serializable {
     private String giaSanPham;
     private String hinhAnh;
 
-    private KieuDang kieuDang;
     private int soLuong;
     private String gioiTinh;
     private String mauSac;
     private Boolean trangThai;
 
+    private int daBan;
+
+    public int getDaBan() {
+        return daBan;
+    }
+
+    public void setDaBan(int daBan) {
+        this.daBan = daBan;
+    }
 
     public int getMaSanPham() {
         return maSanPham;
@@ -45,14 +53,6 @@ public class SanPham implements Serializable {
 
     public void setHinhAnh(String hinhAnh) {
         this.hinhAnh = hinhAnh;
-    }
-
-    public KieuDang getKieuDang() {
-        return kieuDang;
-    }
-
-    public void setKieuDang(KieuDang kieuDang) {
-        this.kieuDang = kieuDang;
     }
 
     public int getSoLuong() {

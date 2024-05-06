@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Hat shop</string>
     <string name="hat_name">Nón lưỡi trai</string>
-    <string name="hatCost">Giá: 250000</string>
+    <string name="hatCost">đ250000</string>
     <string name="hatName">Tên sản phẩm</string>
     <string name="addCart">Thêm vào giỏ hàng</string>
     <string name="hatDescribe">Mô tả chi tiết sản phẩm</string>
@@ -51,4 +51,5 @@
     <string name="saveProductButton">Lưu sản phẩm</string>
     <string name="createFilePDF">Xuất file pdf</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="soldQuantity">Đã bán 23.7k</string>
 </resources>
