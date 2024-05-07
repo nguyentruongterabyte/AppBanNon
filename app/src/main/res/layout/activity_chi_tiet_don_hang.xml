@@ -108,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Khách hàng: "
+                    android:text="@string/customer"
                     android:textSize="20sp" />
 
                 <TextView
@@ -116,15 +116,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Địa chỉ: "
+                    android:text="@string/address"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tvTrangThai"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Trạng thái: Đã giao"
+                    android:text="@string/orderStatus"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -133,19 +133,52 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/liner1">
 
-
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnPDF"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Xuất file" />
+                    android:background="@drawable/background_button"
+                    android:text="@string/exportFileButtonTitle" />
+
+                <Space
+                    android:id="@+id/spaceBtnHuy"
+                    android:layout_width="8dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnHuy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/outline_button"
+                    android:text="@string/cancelButtonTitle"
+                    android:textColor="@color/outline_color"
+                    android:visibility="gone" />
+
+                <Space
+                    android:id="@+id/spaceBtnDanhGia"
+                    android:layout_width="8dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDanhGia"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_button"
+                    android:backgroundTint="@color/outline_color"
+                    android:text="@string/rateButtonTitle"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
 
             </LinearLayout>

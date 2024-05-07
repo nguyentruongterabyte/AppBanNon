@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DonHang implements Serializable {
 
-    private String maDonHang;
+    private int maDonHang;
     private String sdt;
     private String email;
     private int userId;
@@ -62,11 +62,11 @@ public class DonHang implements Serializable {
         this.userId = userId;
     }
 
-    public String getMaDonHang() {
+    public int getMaDonHang() {
         return maDonHang;
     }
 
-    public void setMaDonHang(String maDonHang) {
+    public void setMaDonHang(int maDonHang) {
         this.maDonHang = maDonHang;
     }
 

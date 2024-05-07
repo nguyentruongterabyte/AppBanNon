@@ -58,7 +58,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             DecimalFormat dft = new DecimalFormat("###,###,###");
             myViewHolder.tvGia.setText(String.format("đ%s", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
-            myViewHolder.tvSoLuong.setText(sanPham.getDaBan() > 0 ? "Đã bán " + sanPham.getDaBan() : "");
+            myViewHolder.tvSoLuong.setText(sanPham.getDaBan() > 0 ? "Đã bán " + Utils.formatQuantity(sanPham.getDaBan()) : "");
             if (sanPham.getHinhAnh().contains("http")) {
                 Glide.with(context).load(sanPham.getHinhAnh()).into(myViewHolder.image);
             } else {

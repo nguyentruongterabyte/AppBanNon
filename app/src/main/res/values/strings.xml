@@ -52,4 +52,9 @@
     <string name="createFilePDF">Xuất file pdf</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="soldQuantity">Đã bán 23.7k</string>
+    <string name="exportFileButtonTitle">Xuất file</string>
+    <string name="address">Địa chỉ: Lã Xuân Oai</string>
+    <string name="customer">Khách hàng:</string>
+    <string name="cancelButtonTitle">Hủy</string>
+    <string name="rateButtonTitle">Đánh giá</string>
 </resources>

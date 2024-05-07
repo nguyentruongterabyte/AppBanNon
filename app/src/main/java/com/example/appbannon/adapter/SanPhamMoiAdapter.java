@@ -48,6 +48,7 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
 
         DecimalFormat dft = new DecimalFormat("###,###,###");
         holder.tvGia.setText(String.format("đ%s", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
+        holder.tvSoLuong.setText(sanPham.getDaBan() > 0 ? "Đã bán " + Utils.formatQuantity(sanPham.getDaBan()) : "");
         if (sanPham.getHinhAnh().contains("http")) {
             Glide.with(context).load(sanPham.getHinhAnh()).into(holder.image);
         } else {
@@ -83,7 +84,7 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.My
             tvTen = itemView.findViewById(R.id.item_ten_san_pham_moi);
             image = itemView.findViewById(R.id.item_san_pham_moi_image);
             cardView = itemView.findViewById(R.id.item_san_pham_moi_card_view);
-
+            tvSoLuong = itemView.findViewById(R.id.item_so_luong_da_ban_moi);
             // Tỉ lệ chiều rộng của 2 sản phẩm trên một hàng luôn bằng nhau
             DisplayMetrics displayMetrics = itemView.getResources().getDisplayMetrics();
             int screenWidth = displayMetrics.widthPixels;

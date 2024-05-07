@@ -21,9 +21,9 @@ public class OrderApiCalls {
         compositeDisposable.add(apiBanHang.xemDonHang(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback, throwable -> {
-                    callback.accept(new ResponseObject<>(500, throwable.getMessage()));
-                }));
+                .subscribe(callback, throwable ->
+                        callback.accept(new ResponseObject<>(500, throwable.getMessage()))
+                ));
     }
 
     // Tạo đơn hàng
@@ -40,12 +40,23 @@ public class OrderApiCalls {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                donHangModel -> {
-                                    callback.accept(donHangModel.getResult());
-                                }, throwable -> {
-                                    callback.accept(-1);
-                                }
+                                donHangModel ->
+                                        callback.accept(donHangModel.getResult())
+                                , throwable ->
+                                        callback.accept(-1)
+
                         )
+        );
+    }
+
+    // Hủy đơn mua
+    public static void cancel(int maDonHang, Consumer<ResponseObject<Void>> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.huyDonMua(maDonHang)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        callback, throwable -> new ResponseObject<>(500, throwable.getMessage())
+                )
         );
     }
 }

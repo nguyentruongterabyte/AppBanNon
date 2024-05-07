@@ -102,6 +102,12 @@ public interface ApiBanHang {
             @Field("id") int idDonHang
     );
 
+    @PUT("api/order/cancel.php")
+    @FormUrlEncoded
+    Observable<ResponseObject<Void>> huyDonMua(
+            @Field("maDonHang") int maDonHang
+    );
+
     // user
     @POST("api/user/register.php")
     @FormUrlEncoded
