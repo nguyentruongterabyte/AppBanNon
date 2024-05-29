@@ -1,5 +1,7 @@
 package com.example.appbannon.networking;
 
+import android.content.Context;
+
 import com.example.appbannon.model.DanhMuc;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
@@ -14,7 +16,11 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CategoryApiCalls {
-    private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+    private static ApiBanHang apiBanHang;
+
+    public static void initialize(Context context) {
+        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL, context).create(ApiBanHang.class);
+    }
 
     // call api lấy danh sách danh mục
     public static void get(Consumer<List<DanhMuc>> callback, CompositeDisposable compositeDisposable) {

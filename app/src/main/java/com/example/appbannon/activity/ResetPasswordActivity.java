@@ -28,6 +28,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserApiCalls.initialize(this);
         setContentView(R.layout.activity_reset_password);
         setControl();
         setEvent();

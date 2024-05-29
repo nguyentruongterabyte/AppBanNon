@@ -35,9 +35,11 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.MyViewHo
     List<GioHang> gioHangList;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+
     public GioHangAdapter(Context context, List<GioHang> gioHangList) {
         this.context = context;
         this.gioHangList = gioHangList;
+        CartApiCalls.initialize(context);
     }
 
     @NonNull

@@ -43,6 +43,8 @@ public class TimKiemSanPhamActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProductApiCalls.initialize(this);
+        CartApiCalls.initialize(this);
         setContentView(R.layout.activity_tim_kiem_san_pham);
         setControl();
         ActionToolBar();

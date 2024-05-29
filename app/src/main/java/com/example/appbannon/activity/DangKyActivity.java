@@ -34,6 +34,7 @@ public class DangKyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserApiCalls.initialize(this);
         setContentView(R.layout.activity_dang_ky);
         setControl();
         setEvent();

@@ -20,8 +20,6 @@ import com.example.appbannon.adapter.SanPhamAdapter;
 import com.example.appbannon.model.SanPham;
 import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.networking.ProductApiCalls;
-import com.example.appbannon.retrofit.ApiBanHang;
-import com.example.appbannon.retrofit.RetrofitClient;
 import com.example.appbannon.utils.Utils;
 import com.nex3z.notificationbadge.NotificationBadge;
 
@@ -36,7 +34,6 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     static final int PRODUCT_IN_A_PAGE = 8;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerViewDSSanPham;
-    ApiBanHang apiBanHang;
     List<SanPham> mangSanPham;
     SanPhamAdapter sanPhamAdapter;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -53,8 +50,9 @@ public class DanhSachSanPhamActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProductApiCalls.initialize(this);
+        CartApiCalls.initialize(this);
         setContentView(R.layout.activity_danh_sach_san_pham);
-        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
         setControl();
         ActionToolBar();
         initData();

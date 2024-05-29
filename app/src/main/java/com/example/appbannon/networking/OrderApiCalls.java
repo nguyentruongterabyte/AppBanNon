@@ -1,5 +1,7 @@
 package com.example.appbannon.networking;
 
+import android.content.Context;
+
 import com.example.appbannon.model.DonHang;
 import com.example.appbannon.model.ResponseObject;
 import com.example.appbannon.retrofit.ApiBanHang;
@@ -14,7 +16,11 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderApiCalls {
-    private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+    private static ApiBanHang apiBanHang;
+
+    public static void initialize(Context context) {
+        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL, context).create(ApiBanHang.class);
+    }
 
     // Xem đơn hàng
     public static void getAll(int userId, Consumer<ResponseObject<List<DonHang>>> callback, CompositeDisposable compositeDisposable) {

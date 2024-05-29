@@ -18,6 +18,9 @@ public class DonHang implements Serializable {
     private String ngayTao;
     private String token;
 
+    private int hasToken;
+
+    private int daDanhGia;
 
     public DonHang() {
     }
@@ -116,5 +119,21 @@ public class DonHang implements Serializable {
 
     public void setChiTiet(String chiTiet) {
         this.chiTiet = chiTiet;
+    }
+
+    public int getHasToken() {
+        return hasToken;
+    }
+
+    public void setHasToken(int hasToken) {
+        this.hasToken = hasToken;
+    }
+
+    public int getDaDanhGia() {
+        return daDanhGia;
+    }
+
+    public void setDaDanhGia(int daDanhGia) {
+        this.daDanhGia = daDanhGia;
     }
 }

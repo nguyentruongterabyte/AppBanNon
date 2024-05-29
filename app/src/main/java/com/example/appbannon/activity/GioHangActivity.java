@@ -40,6 +40,7 @@ public class GioHangActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CartApiCalls.initialize(this);
         setContentView(R.layout.activity_gio_hang);
         setControl();
         initData();

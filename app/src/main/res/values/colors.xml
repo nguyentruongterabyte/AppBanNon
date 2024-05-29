@@ -9,4 +9,7 @@
     <color name="white">#ffffffff</color>
     <color name="text_color">#ff03dac5</color>
     <color name="outline_color">#ee4d2d</color>
+    <color name="yellow">#ffd700</color>
+    <color name="text_layout_color">#f5f5f5</color>
+    <color name="line_separate_color">#ACACAC</color>
 </resources>

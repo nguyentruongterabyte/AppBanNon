@@ -9,11 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
-    public static final String BASE_URL = "http://10.252.1.179/hatshop/";
+    // Base URL
+    public static final String BASE_URL = "http://192.168.1.11:8000/hatshop/";
+
+    // Base image url
     public static final String BASE_IMAGE_URL = "images/";
+
+    // mảng giỏ hàng
     public static List<GioHang> mangGioHang;
+
+    // mảng mua hàng
     public static List<GioHang> mangMuaHang = new ArrayList<>();
+
+    // current user
     public static User currentUser = new User();
+
 
     // hàm định dạng số lượng đã bán
     @SuppressLint("DefaultLocale")

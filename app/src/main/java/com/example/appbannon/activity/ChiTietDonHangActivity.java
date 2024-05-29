@@ -36,6 +36,7 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OrderApiCalls.initialize(this);
         setContentView(R.layout.activity_chi_tiet_don_hang);
         setControl();
         initData();
@@ -45,6 +46,13 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
+        btnDanhGia.setOnClickListener(v -> {
+            // Chuyển activity đánh giá
+            Intent intent = new Intent(getApplicationContext(), DanhGiaActivity.class);
+            intent.putExtra("maDonHang", donHang.getMaDonHang());
+            startActivity(intent);
+        });
+
         btnPDF.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), InHoaDonActivity.class);
             intent.putExtra("maDonHang", donHang.getMaDonHang());
@@ -109,7 +117,8 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
                 if (donHang.getTrangThai().equalsIgnoreCase("Chờ xác nhận")) {
                     btnHuy.setVisibility(View.VISIBLE);
                     spaceBtnHuy.setVisibility(View.VISIBLE);
-                } else if (donHang.getTrangThai().equalsIgnoreCase("Đã giao")) {
+                }
+                if (donHang.getDaDanhGia() == 0 && donHang.getTrangThai().equalsIgnoreCase("Đã giao")) {
                     // Nếu đơn hàng có trạng thái đã giao thì có thể đánh giá
                     btnDanhGia.setVisibility(View.VISIBLE);
                     spaceBtnDanhGia.setVisibility(View.VISIBLE);

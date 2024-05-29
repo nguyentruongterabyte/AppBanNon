@@ -7,6 +7,9 @@ public class User {
     private String username;
     private String mobile;
 
+    private String accessToken;
+    private String refreshToken;
+
     public User() {
     }
 
@@ -55,5 +58,21 @@ public class User {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

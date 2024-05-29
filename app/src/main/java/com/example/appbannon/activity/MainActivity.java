@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProductApiCalls.initialize(this);
+        CategoryApiCalls.initialize(this);
+        CartApiCalls.initialize(this);
         setContentView(R.layout.activity_main);
         Paper.init(this);
         if (Paper.book().read("user") != null) {

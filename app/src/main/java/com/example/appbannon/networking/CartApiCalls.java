@@ -1,5 +1,7 @@
 package com.example.appbannon.networking;
 
+import android.content.Context;
+
 import com.example.appbannon.model.GioHang;
 import com.example.appbannon.retrofit.ApiBanHang;
 import com.example.appbannon.retrofit.RetrofitClient;
@@ -14,7 +16,11 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CartApiCalls {
-    private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+    private static ApiBanHang apiBanHang;
+
+    public static void initialize(Context context) {
+        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL, context).create(ApiBanHang.class);
+    }
 
     // call api lấy danh sách giỏ hàng
     public static void getAll(int userId, Consumer<List<GioHang>> callback, CompositeDisposable compositeDisposable) {
@@ -39,9 +45,6 @@ public class CartApiCalls {
         compositeDisposable.add(apiBanHang.themSanPhamVaoGioHang(
                                 gioHang.getMaSanPham(),
                                 gioHang.getUserId(),
-                                gioHang.getTenSanPham(),
-                                gioHang.getGiaSanPham(),
-                                gioHang.getHinhAnh(),
                                 gioHang.getSoLuong()
                         )
                         .subscribeOn(Schedulers.io())
@@ -61,7 +64,6 @@ public class CartApiCalls {
         compositeDisposable.add(apiBanHang.updateSanPhamTrongGioHang(
                         gioHang.getMaSanPham(),
                         gioHang.getUserId(),
-                        gioHang.getGiaSanPham(),
                         gioHang.getSoLuong())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

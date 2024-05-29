@@ -1,6 +1,9 @@
 package com.example.appbannon.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -37,6 +40,7 @@ public class DangNhapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserApiCalls.initialize(this);
         setContentView(R.layout.activity_dang_nhap);
         setControl();
         setEvent();
@@ -109,6 +113,11 @@ public class DangNhapActivity extends AppCompatActivity {
                 Utils.currentUser = userModel.getResult();
                 Paper.book().write("user", userModel.getResult());
 
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("refreshToken", Utils.currentUser.getRefreshToken());
+                editor.putString("accessToken", Utils.currentUser.getAccessToken());
+                editor.apply();
                 progressBar.setVisibility(View.INVISIBLE);
                 // Nếu đăng nhập thành công, chuyển về màn hình trang chủ
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);

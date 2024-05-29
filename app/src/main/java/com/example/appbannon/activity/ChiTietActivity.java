@@ -2,19 +2,25 @@ package com.example.appbannon.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.appbannon.R;
+import com.example.appbannon.adapter.DanhGiaAdapter;
 import com.example.appbannon.model.GioHang;
 import com.example.appbannon.model.SanPham;
 import com.example.appbannon.networking.CartApiCalls;
+import com.example.appbannon.networking.ProductApiCalls;
 import com.example.appbannon.utils.Utils;
 import com.nex3z.notificationbadge.NotificationBadge;
 
@@ -36,11 +42,15 @@ public class ChiTietActivity extends AppCompatActivity {
 
     int soLuongSPTrongGioHang = 0;
 
+    RecyclerView recycleViewDanhGia;
+    DanhGiaAdapter danhGiaAdapter;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProductApiCalls.initialize(this);
+        CartApiCalls.initialize(this);
         setContentView(R.layout.activity_chi_tiet);
         setControl();
         ActionToolBar();
@@ -180,37 +190,55 @@ public class ChiTietActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        sanPham = (SanPham) getIntent().getSerializableExtra("chiTietSanPham");
-        if (sanPham != null) {
-            DecimalFormat dft = new DecimalFormat("###,###,###");
-            tvTenSanPham.setText(sanPham.getTenSanPham());
-            tvGiaSanPham.setText(String.format("Giá: %s đ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
-            String moTa = "- Màu sắc: " + sanPham.getMauSac() +
-                    "\n- Giới tính: " + sanPham.getGioiTinh() +
-                    "\n- Số lượng: " + sanPham.getSoLuong();
-            tvMoTaChiTiet.setText(moTa);
-            if (sanPham.getHinhAnh().contains("http")) {
-                Glide.with(getApplicationContext()).load(sanPham.getHinhAnh()).into(imageChiTiet);
+        int maSanPham = getIntent().getIntExtra("maSanPham", -1);
+        if (maSanPham == -1) {
+            Toast.makeText(this, "Sản phẩm không hợp lệ", Toast.LENGTH_SHORT).show();
+        }
+        ProductApiCalls.getProduct(maSanPham, sanPhamModel -> {
+            if (sanPhamModel.getStatus() == 200) {
+                sanPham = sanPhamModel.getResult();
+                assert sanPham != null;
+
+
+                DecimalFormat dft = new DecimalFormat("###,###,###");
+                tvTenSanPham.setText(sanPham.getTenSanPham());
+                tvGiaSanPham.setText(String.format("Giá: %s đ", dft.format(Double.parseDouble(sanPham.getGiaSanPham()))));
+                String moTa = "- Màu sắc: " + sanPham.getMauSac() +
+                        "\n- Giới tính: " + sanPham.getGioiTinh() +
+                        "\n- Số lượng: " + sanPham.getSoLuong();
+                tvMoTaChiTiet.setText(moTa);
+                if (sanPham.getHinhAnh().contains("http")) {
+                    Glide.with(getApplicationContext()).load(sanPham.getHinhAnh()).into(imageChiTiet);
+                } else {
+                    Glide.with(getApplicationContext()).load(Utils.BASE_URL + Utils.BASE_IMAGE_URL + "product/" + sanPham.getHinhAnh()).into(imageChiTiet);
+                }
+                // Hiển thị đánh giá của sản phẩm
+                if (sanPham.getDanhGiaSanPham().size() > 0) {
+                    Log.d("myLog", sanPham.getDanhGiaSanPham().toString());
+                    danhGiaAdapter = new DanhGiaAdapter(getApplicationContext(), sanPham.getDanhGiaSanPham());
+                    recycleViewDanhGia.setAdapter(danhGiaAdapter);
+                }
+
+
+                // Nếu sản phẩm đã được thêm vào giỏ hàng trước đó
+                // thì lấy số lượng đó ra để so sánh
+                // với số lượng người dùng nhấn thêm
+                for (int i = 0; i < Utils.mangGioHang.size(); i++) {
+                    GioHang gioHang = Utils.mangGioHang.get(i);
+                    if (gioHang.getMaSanPham() == sanPham.getMaSanPham()) {
+                        soLuongSPTrongGioHang = gioHang.getSoLuong();
+                    }
+                }
+
+                // Set số lượng để thêm vào giỏ hàng = 0 nếu số lượng sản phẩm
+                // trong giỏ hàng đạt giơi hạn số lượng sản phẩm trong db
+                // = 1 trong trường hợp còn lại
+                tvSoLuong.setText(String.valueOf(soLuongSPTrongGioHang != sanPham.getSoLuong() ? 1 : 0));
+
             } else {
-                Glide.with(getApplicationContext()).load(Utils.BASE_URL + Utils.BASE_IMAGE_URL + "product/" + sanPham.getHinhAnh()).into(imageChiTiet);
+                Toast.makeText(this, sanPhamModel.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }
-
-        // Nếu sản phẩm đã được thêm vào giỏ hàng trước đó
-        // thì lấy số lượng đó ra để so sánh
-        // với số lượng người dùng nhấn thêm
-        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
-            GioHang gioHang = Utils.mangGioHang.get(i);
-            if (gioHang.getMaSanPham() == sanPham.getMaSanPham()) {
-                soLuongSPTrongGioHang = gioHang.getSoLuong();
-            }
-        }
-
-        // Set số lượng để thêm vào giỏ hàng = 0 nếu số lượng sản phẩm
-        // trong giỏ hàng đạt giơi hạn số lượng sản phẩm trong db
-        // = 1 trong trường hợp còn lại
-        assert sanPham != null;
-        tvSoLuong.setText(String.valueOf(soLuongSPTrongGioHang != sanPham.getSoLuong() ? 1 : 0));
+        }, compositeDisposable);
 
     }
 
@@ -232,8 +260,8 @@ public class ChiTietActivity extends AppCompatActivity {
         badgeGioHang = findViewById(R.id.menu_sl);
 
         frameLayoutGioHang = findViewById(R.id.frameGioHang);
-
-
+        recycleViewDanhGia = findViewById(R.id.recycleViewDanhGia);
+        recycleViewDanhGia.setLayoutManager(new LinearLayoutManager(this));
         if (Utils.mangGioHang != null) {
             badgeGioHang.setText(String.valueOf(Utils.mangGioHang.size()));
         }
@@ -259,17 +287,20 @@ public class ChiTietActivity extends AppCompatActivity {
         // Nếu sản phẩm đã được thêm vào giỏ hàng trước đó
         // thì lấy số lượng đó ra để so sánh
         // với số lượng người dùng nhấn thêm
-        for (int i = 0; i < Utils.mangGioHang.size(); i++) {
-            GioHang gioHang = Utils.mangGioHang.get(i);
-            if (gioHang.getMaSanPham() == sanPham.getMaSanPham()) {
-                soLuongSPTrongGioHang = gioHang.getSoLuong();
-            }
-        }
 
-        // Set số lượng để thêm vào giỏ hàng = 0 nếu số lượng sản phẩm
-        // trong giỏ hàng đạt giơi hạn số lượng sản phẩm trong db
-        // = 1 trong trường hợp còn lại
-        assert sanPham != null;
-        tvSoLuong.setText(String.valueOf(soLuongSPTrongGioHang != sanPham.getSoLuong() ? 1 : 0));
+        if (sanPham != null) {
+            for (int i = 0; i < Utils.mangGioHang.size(); i++) {
+                GioHang gioHang = Utils.mangGioHang.get(i);
+                if (gioHang.getMaSanPham() == sanPham.getMaSanPham()) {
+                    soLuongSPTrongGioHang = gioHang.getSoLuong();
+                }
+            }
+
+            // Set số lượng để thêm vào giỏ hàng = 0 nếu số lượng sản phẩm
+            // trong giỏ hàng đạt giơi hạn số lượng sản phẩm trong db
+            // = 1 trong trường hợp còn lại
+            assert sanPham != null;
+            tvSoLuong.setText(String.valueOf(soLuongSPTrongGioHang != sanPham.getSoLuong() ? 1 : 0));
+        }
     }
 }

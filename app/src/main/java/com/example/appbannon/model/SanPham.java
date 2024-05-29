@@ -1,6 +1,7 @@
 package com.example.appbannon.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class SanPham implements Serializable {
     private int maSanPham;
@@ -14,6 +15,8 @@ public class SanPham implements Serializable {
     private Boolean trangThai;
 
     private int daBan;
+    // đánh giá
+    private List<DanhGia> danhGiaSanPham;
 
     public int getDaBan() {
         return daBan;
@@ -85,5 +88,29 @@ public class SanPham implements Serializable {
 
     public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public List<DanhGia> getDanhGiaSanPham() {
+        return danhGiaSanPham;
+    }
+
+    public void setDanhGiaSanPham(List<DanhGia> danhGiaSanPham) {
+        this.danhGiaSanPham = danhGiaSanPham;
+    }
+
+    @Override
+    public String toString() {
+        return "SanPham{" +
+                "maSanPham=" + maSanPham +
+                ", tenSanPham='" + tenSanPham + '\'' +
+                ", giaSanPham='" + giaSanPham + '\'' +
+                ", hinhAnh='" + hinhAnh + '\'' +
+                ", soLuong=" + soLuong +
+                ", gioiTinh='" + gioiTinh + '\'' +
+                ", mauSac='" + mauSac + '\'' +
+                ", trangThai=" + trangThai +
+                ", daBan=" + daBan +
+                ", danhGiaSanPham=" + danhGiaSanPham +
+                '}';
     }
 }

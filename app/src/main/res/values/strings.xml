@@ -57,4 +57,12 @@
     <string name="customer">Khách hàng:</string>
     <string name="cancelButtonTitle">Hủy</string>
     <string name="rateButtonTitle">Đánh giá</string>
+    <string name="PleasureLevel">Tuyệt vời</string>
+    <string name="productQualityTitle">Chất lượng sản phẩm: </string>
+    <string name="sendButtonTitle">Gửi</string>
+    <string name="isCorrectWithDescribeHint">Đúng với mô tả: </string>
+    <string name="commentHint">Hãy chia sẻ nhận cho sản phẩm này bạn nhé!</string>
+    <string name="more">+6</string>
+    <string name="date">04-05-2024</string>
+    <string name="ratingTitle">Đánh giá</string>
 </resources>

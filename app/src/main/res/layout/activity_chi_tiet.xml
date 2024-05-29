@@ -48,7 +48,7 @@
             android:id="@+id/imageChiTiet"
             android:layout_width="150dp"
             android:layout_height="200dp"
-            android:src="@drawable/samsung"
+            android:src="@drawable/ic_media"
             android:contentDescription="@string/todo" />
 
         <LinearLayout
@@ -92,7 +92,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_minus" />
+                    android:src="@drawable/ic_minus"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/tvSoLuong"
@@ -135,26 +136,47 @@
         android:layout_height="0dp"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/hatDescribe"
-            android:textStyle="bold"
-            android:textSize="15sp" />
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
 
-            <TextView
-                android:id="@+id/tvMoTaChiTiet"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/describeExample" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/hatDescribe"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvMoTaChiTiet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/describeExample" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ratingTitle"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleViewDanhGia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

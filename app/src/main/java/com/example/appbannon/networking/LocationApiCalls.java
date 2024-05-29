@@ -1,5 +1,7 @@
 package com.example.appbannon.networking;
 
+import android.content.Context;
+
 import com.example.appbannon.model.ResponseObject;
 import com.example.appbannon.model.ToaDo;
 import com.example.appbannon.retrofit.ApiBanHang;
@@ -13,7 +15,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class LocationApiCalls {
-    private static final ApiBanHang apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiBanHang.class);
+    private static ApiBanHang apiBanHang;
+
+    public static void initialize(Context context) {
+        apiBanHang = RetrofitClient.getInstance(Utils.BASE_URL, context).create(ApiBanHang.class);
+    }
 
     public static void getLocation(Consumer<ResponseObject<ToaDo>> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.getToaDo()

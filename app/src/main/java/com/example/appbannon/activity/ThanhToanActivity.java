@@ -49,6 +49,8 @@ public class ThanhToanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OrderApiCalls.initialize(this);
+        CartApiCalls.initialize(this);
         setContentView(R.layout.activity_thanh_toan);
         // Zalo
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -90,7 +92,6 @@ public class ThanhToanActivity extends AppCompatActivity {
                 donHang.setDiaChi(edtDiaChi.getText().toString());
                 donHang.setSoLuong(totalItem);
                 donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
-                System.out.println("chitiet" + new Gson().toJson(Utils.mangMuaHang));
 
                 // gửi api tạo đơn hàng và tạo chi tiết đơn hàng
                 OrderApiCalls.create(donHang, maDonHang -> {
