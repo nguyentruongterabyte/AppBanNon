@@ -1,5 +1,7 @@
 package com.example.appbannon.model;
 
+import androidx.annotation.NonNull;
+
 public class HinhAnhDanhGia {
     private int maHinhAnh;
     private int maDanhGia;
@@ -44,6 +46,7 @@ public class HinhAnhDanhGia {
         this.hinhAnhURL = hinhAnhURL;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "HinhAnhDanhGia{" +
