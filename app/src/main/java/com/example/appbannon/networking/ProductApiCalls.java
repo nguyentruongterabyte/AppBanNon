@@ -2,6 +2,7 @@ package com.example.appbannon.networking;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -43,16 +44,18 @@ public class ProductApiCalls {
                         sanPhamModel -> {
                             if (sanPhamModel.getStatus() == 200) {
                                 callback.accept(sanPhamModel.getResult());
+
                             } else {
                                 callback.accept(new ArrayList<>());
+
                             }
                         }, throwable -> {
+
                             callback.accept(new ArrayList<>());
                         }
                 )
         );
     }
-
     // get sản phẩm khi có mã sản phẩm
     public static void getProduct(int productId, Consumer<ResponseObject<SanPham>> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.getSanPham(productId)

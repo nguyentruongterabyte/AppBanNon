@@ -1,6 +1,7 @@
 package com.example.appbannon.networking;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.appbannon.model.DonHang;
 import com.example.appbannon.model.ResponseObject;
@@ -32,6 +33,19 @@ public class OrderApiCalls {
                 ));
     }
 
+    public static void updateToken(String token, int idDonHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
+        compositeDisposable.add(apiBanHang.updateToken(token, idDonHang)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        messageModel -> {
+                            callback.accept(messageModel.getStatus() == 200);
+                        }, throwable -> {
+                            callback.accept(false);
+                        }
+                ));
+    }
+
     // Tạo đơn hàng
     public static void create(DonHang donHang, Consumer<Integer> callback, CompositeDisposable compositeDisposable) {
         compositeDisposable.add(apiBanHang.createDonHang(
@@ -48,8 +62,11 @@ public class OrderApiCalls {
                         .subscribe(
                                 donHangModel ->
                                         callback.accept(donHangModel.getResult())
-                                , throwable ->
-                                        callback.accept(-1)
+                                , throwable -> {
+                                    Log.d("myLog", throwable.getMessage());
+                                    callback.accept(-1);
+                                }
+
 
                         )
         );

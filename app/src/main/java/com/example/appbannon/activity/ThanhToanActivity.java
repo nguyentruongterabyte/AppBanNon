@@ -92,7 +92,6 @@ public class ThanhToanActivity extends AppCompatActivity {
                 donHang.setDiaChi(edtDiaChi.getText().toString());
                 donHang.setSoLuong(totalItem);
                 donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
-
                 // gửi api tạo đơn hàng và tạo chi tiết đơn hàng
                 OrderApiCalls.create(donHang, maDonHang -> {
                     if (maDonHang != -1) {
@@ -134,6 +133,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                 donHang.setDiaChi(edtDiaChi.getText().toString());
                 donHang.setSoLuong(totalItem);
                 donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
+                Log.d("myLog",donHang.toString());
                 requestZaloPay();
 
             }
@@ -155,6 +155,9 @@ public class ThanhToanActivity extends AppCompatActivity {
                     @Override
                     public void onPaymentSucceeded(String s, String s1, String s2) {
 
+
+                        Log.d("myLog", "Thanh toán zalo thành công");
+
                         OrderApiCalls.create(donHang, maDonHang -> {
                             if (maDonHang != -1) {
                                 // Nếu thêm đơn hàng thành công thì thực hiện xóa sản phẩm
@@ -174,7 +177,7 @@ public class ThanhToanActivity extends AppCompatActivity {
 
                                 }
                                 // update token thanh toán của đơn hàng vừa tạo
-                                CartApiCalls.updateToken(token, maDonHang, isSuccess -> {
+                                OrderApiCalls.updateToken(token, maDonHang, isSuccess -> {
                                     if (isSuccess) {
                                         Toast.makeText(ThanhToanActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
                                         // xóa mảng mua hàng
@@ -183,7 +186,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                                         Toast.makeText(ThanhToanActivity.this, "Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show();
                                     }
                                 }, compositeDisposable);
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                Intent intent = new Intent(getApplicationContext(), XemDonHangActivity.class);
                                 startActivity(intent);
                             }
                         }, compositeDisposable);

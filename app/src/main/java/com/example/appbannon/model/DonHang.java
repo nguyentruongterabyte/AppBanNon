@@ -136,4 +136,24 @@ public class DonHang implements Serializable {
     public void setDaDanhGia(int daDanhGia) {
         this.daDanhGia = daDanhGia;
     }
+
+    @Override
+    public String toString() {
+        return "DonHang{" +
+                "maDonHang=" + maDonHang +
+                ", sdt='" + sdt + '\'' +
+                ", email='" + email + '\'' +
+                ", userId=" + userId +
+                ", tongTien='" + tongTien + '\'' +
+                ", diaChi='" + diaChi + '\'' +
+                ", soLuong=" + soLuong +
+                ", chiTiet='" + chiTiet + '\'' +
+                ", items=" + items +
+                ", trangThai='" + trangThai + '\'' +
+                ", ngayTao='" + ngayTao + '\'' +
+                ", token='" + token + '\'' +
+                ", hasToken=" + hasToken +
+                ", daDanhGia=" + daDanhGia +
+                '}';
+    }
 }

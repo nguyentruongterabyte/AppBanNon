@@ -93,16 +93,5 @@ public class CartApiCalls {
 
     }
 
-    public static void updateToken(String token, int idDonHang, Consumer<Boolean> callback, CompositeDisposable compositeDisposable) {
-        compositeDisposable.add(apiBanHang.updateToken(token, idDonHang)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        messageModel -> {
-                            callback.accept(messageModel.getStatus() == 200);
-                        }, throwable -> {
-                            callback.accept(false);
-                        }
-                ));
-    }
+
 }

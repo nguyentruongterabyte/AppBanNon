@@ -12,7 +12,6 @@ public class SanPham implements Serializable {
     private int soLuong;
     private String gioiTinh;
     private String mauSac;
-    private Boolean trangThai;
 
     private int daBan;
     // đánh giá
@@ -81,15 +80,6 @@ public class SanPham implements Serializable {
     public void setMauSac(String mauSac) {
         this.mauSac = mauSac;
     }
-
-    public Boolean getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(Boolean trangThai) {
-        this.trangThai = trangThai;
-    }
-
     public List<DanhGia> getDanhGiaSanPham() {
         return danhGiaSanPham;
     }
@@ -108,9 +98,9 @@ public class SanPham implements Serializable {
                 ", soLuong=" + soLuong +
                 ", gioiTinh='" + gioiTinh + '\'' +
                 ", mauSac='" + mauSac + '\'' +
-                ", trangThai=" + trangThai +
-                ", daBan=" + daBan +
-                ", danhGiaSanPham=" + danhGiaSanPham +
+                  ", daBan=" + daBan +
+                ", danhGiaDSanPham=" + danhGiaSanPham +
                 '}';
     }
 }
+// De t

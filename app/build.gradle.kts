@@ -33,6 +33,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {
@@ -43,7 +44,8 @@ dependencies {
     implementation(
         fileTree(
             mapOf(
-                "dir" to "C:\\Users\\Administrator\\Documents\\zalopay",
+
+                "dir" to "D:\\Workspace\\Java\\Android\\zalopay",
                 "include" to listOf("*.aar", "*.jar")
             )
         )
