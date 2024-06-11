@@ -21,6 +21,15 @@ public class RetrofitClient {
     private static Retrofit instance;
     protected static ApiBanHang apiBanHang;
 
+    public static Retrofit getInstance2(String baseUrl, Context context) {
+
+        return new Retrofit.Builder()
+                .baseUrl(baseUrl)  // Thay thế YOUR_BASE_URL bằng URL của bạn
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .build();
+    }
+
     public static Retrofit getInstance(String baseUrl, Context context) {
 
 

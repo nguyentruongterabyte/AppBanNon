@@ -39,24 +39,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         LocationApiCalls.initialize(this);
         setContentView(R.layout.activity_map);
-        initData();
         setControl();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
         setEvent();
-    }
-
-    private void initData() {
-        LocationApiCalls.getLocation(toaDoModel -> {
-            if (toaDoModel.getStatus() == 200) {
-                toaDo = toaDoModel.getResult();
-//                Log.d("mylog", toaDo.toString());
-            } else {
-                Toast.makeText(this, "Không thể lấy được vị trí của cửa hàng", Toast.LENGTH_SHORT).show();
-            }
-        }, compositeDisposable);
     }
 
     private void setEvent() {

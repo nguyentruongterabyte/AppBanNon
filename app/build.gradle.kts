@@ -45,7 +45,7 @@ dependencies {
         fileTree(
             mapOf(
 
-                "dir" to "D:\\Workspace\\Java\\Android\\zalopay",
+                "dir" to "C:\\Users\\Administrator\\Documents\\zalopay",
                 "include" to listOf("*.aar", "*.jar")
             )
         )

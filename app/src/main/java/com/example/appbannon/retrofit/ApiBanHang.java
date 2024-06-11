@@ -1,6 +1,10 @@
 package com.example.appbannon.retrofit;
 
 
+import com.example.appbannon.model.Address.District;
+import com.example.appbannon.model.Address.GenericsBaseResponse;
+import com.example.appbannon.model.Address.Province;
+import com.example.appbannon.model.Address.Ward;
 import com.example.appbannon.model.DanhMuc;
 import com.example.appbannon.model.DonHang;
 import com.example.appbannon.model.GioHang;
@@ -23,6 +27,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiBanHang {
@@ -175,4 +180,16 @@ public interface ApiBanHang {
     Call<ResponseObject<String>> uploadRatingImage(
             @Part MultipartBody.Part file
     );
+
+    // Địa chỉ
+    @GET("api-tinhthanh/1/0.htm")
+    Observable<GenericsBaseResponse<List<Province>>> getProvinces();
+
+    @GET("api-tinhthanh/2/{B}.htm")
+    Observable<GenericsBaseResponse<List<District>>> getDistricts(@Path("B") String provinceId);
+
+    @GET("api-tinhthanh/3/{B}.htm")
+    Observable<GenericsBaseResponse<List<Ward>>> getWards(@Path("B") String districtId);
+
+
 }

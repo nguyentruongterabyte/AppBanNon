@@ -10,10 +10,13 @@ import java.util.List;
 
 public class Utils {
     // Base URL
-    public static final String BASE_URL = "http://192.168.1.20:8000/hatshop/";
+    public static final String BASE_URL = "http://192.168.1.2:8000/hatshop/";
 
     // Base image url
     public static final String BASE_IMAGE_URL = "images/";
+
+    // Base address url
+    public static final String BASE_ADDRESS_URL = "https://esgoo.net/";
 
     // mảng giỏ hàng
     public static List<GioHang> mangGioHang;

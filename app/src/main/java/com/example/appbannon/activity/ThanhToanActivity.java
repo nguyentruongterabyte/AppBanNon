@@ -1,10 +1,15 @@
 package com.example.appbannon.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,9 +18,14 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.appbannon.R;
+import com.example.appbannon.model.Address.Address;
+import com.example.appbannon.model.Address.District;
+import com.example.appbannon.model.Address.Province;
+import com.example.appbannon.model.Address.Ward;
 import com.example.appbannon.model.CreateOrder;
 import com.example.appbannon.model.DonHang;
 import com.example.appbannon.model.GioHang;
+import com.example.appbannon.networking.AddressApiCalls;
 import com.example.appbannon.networking.CartApiCalls;
 import com.example.appbannon.networking.OrderApiCalls;
 import com.example.appbannon.utils.Utils;
@@ -25,6 +35,8 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -41,16 +53,21 @@ public class ThanhToanActivity extends AppCompatActivity {
     TextInputEditText edtDiaChi;
 
     AppCompatButton btnDatHang, btnZaloPay;
+    Spinner spinnerProvince, spinnerDistrict, spinnerWard;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     long tongTien;
     int totalItem;
     DonHang donHang;
+    List<Province> provinces = new ArrayList<>();
+    List<District> districts;
+    List<Ward> wards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OrderApiCalls.initialize(this);
         CartApiCalls.initialize(this);
+        AddressApiCalls.initialize(this);
         setContentView(R.layout.activity_thanh_toan);
         // Zalo
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -67,6 +84,56 @@ public class ThanhToanActivity extends AppCompatActivity {
     private void initData() {
         tvEmail.setText(Utils.currentUser.getEmail());
         tvSDT.setText(Utils.currentUser.getMobile());
+
+        fetchProvinces();
+    }
+
+    private void setupProvinceSpinner(List<Province> provinces) {
+        if (provinces != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+            adapter.clear();
+            for (Province province : provinces) {
+                adapter.add(province.getName());
+            }
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerProvince.setAdapter(adapter);
+        }
+    }
+
+    private void setupDistrictSpinner(List<District> districts) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        adapter.clear();
+        for (District district : districts) {
+            adapter.add(district.getName());
+        }
+        adapter.notifyDataSetChanged();
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDistrict.setAdapter(adapter);
+    }
+
+    private void setupWardSpinner(List<Ward> wards) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        adapter.clear();
+        for (Ward ward : wards) {
+            adapter.add(ward.getName());
+        }
+        adapter.notifyDataSetChanged();
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerWard.setAdapter(adapter);
+    }
+
+    private void fetchProvinces() {
+        AddressApiCalls.getProvinces(provinceResponse -> {
+            if (provinceResponse.getError() != 2) {
+                provinces = provinceResponse.getData();
+                for (int i = 0; i < provinces.size(); i++) {
+                    Log.d("myLog", provinces.get(i).getName());
+                }
+                setupProvinceSpinner(provinces);
+            } else {
+                Log.d("myLog", provinceResponse.getError_text());
+            }
+        }, compositeDisposable);
     }
 
     private void countItem() {
@@ -77,6 +144,87 @@ public class ThanhToanActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
+
+        spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Lấy đối tượng Province được chọn từ danh sách
+                Province selectedProvince = provinces.get(position);
+                // Lấy id của Province được chọn
+                String selectedProvinceId = selectedProvince.getId();
+                Address address = new Address.Builder()
+                        .province(selectedProvince.getName())
+                        .build();
+
+                edtDiaChi.setText(address.getProvince());
+
+                AddressApiCalls.getDistricts(selectedProvinceId, districtResponse -> {
+                    runOnUiThread(() -> {
+                        if (districtResponse.getError() != 2) {
+                            districts = districtResponse.getData();
+                            setupDistrictSpinner(districts);
+                        }
+                    });
+                }, compositeDisposable);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                District selectedDistrict = districts.get(position);
+
+                String selectedDistrictId = selectedDistrict.getId();
+                Log.d("myLog", selectedDistrictId);
+                Address address = new Address.Builder()
+                        .province(spinnerProvince.getSelectedItem().toString())
+                        .district(selectedDistrict.getName())
+                        .build();
+
+                edtDiaChi.setText(address.getDistrict() + ", " + address.getProvince());
+                AddressApiCalls.getWards(selectedDistrictId, wardResponse -> {
+                    if (wardResponse.getError() != 2) {
+                        wards = wardResponse.getData();
+                        runOnUiThread(() -> setupWardSpinner(wards));
+                    }
+                }, compositeDisposable);
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerWard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Ward selectedWard = wards.get(position);
+
+                Address address = new Address.Builder()
+                        .province(spinnerProvince.getSelectedItem().toString())
+                        .district(spinnerDistrict.getSelectedItem().toString())
+                        .ward(spinnerWard.getSelectedItem().toString())
+                        .build();
+                edtDiaChi.setText(address.getWard() + ", " + address.getDistrict() + ", " + address.getProvince());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
         btnDatHang.setOnClickListener(v -> {
 
             String diaChi = Objects.requireNonNull(edtDiaChi.getText()).toString().trim();
@@ -100,12 +248,10 @@ public class ThanhToanActivity extends AppCompatActivity {
 
                         for (GioHang gh : Utils.mangMuaHang) {
                             // xóa sản phẩm đã mua trong database
-                            CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> {
-                                CartApiCalls.getAll(Utils.currentUser.getId(), mangGioHang -> {
-                                    // cập nhật mảng giỏ hàng
-                                    Utils.mangGioHang = mangGioHang;
-                                }, compositeDisposable);
-                            }, compositeDisposable);
+                            CartApiCalls.delete(gh.getMaSanPham(), gh.getUserId(), ok -> CartApiCalls.getAll(Utils.currentUser.getId(), mangGioHang -> {
+                                // cập nhật mảng giỏ hàng
+                                Utils.mangGioHang = mangGioHang;
+                            }, compositeDisposable), compositeDisposable);
 
                         }
                         // mảng mua hàng sẽ trống
@@ -133,7 +279,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                 donHang.setDiaChi(edtDiaChi.getText().toString());
                 donHang.setSoLuong(totalItem);
                 donHang.setChiTiet(new Gson().toJson(Utils.mangMuaHang));
-                Log.d("myLog",donHang.toString());
+                Log.d("myLog", donHang.toString());
                 requestZaloPay();
 
             }
@@ -230,6 +376,10 @@ public class ThanhToanActivity extends AppCompatActivity {
 
         btnDatHang = findViewById(R.id.btnDatHang);
         btnZaloPay = findViewById(R.id.btnZaloPay);
+
+        spinnerProvince = findViewById(R.id.spinnerProvince);
+        spinnerDistrict = findViewById(R.id.spinnerDistrict);
+        spinnerWard = findViewById(R.id.spinnerWard);
 
         DecimalFormat dft = new DecimalFormat("###,###,###");
         tongTien = getIntent().getLongExtra("tongTien", 0);
